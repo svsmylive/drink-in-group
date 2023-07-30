@@ -2,8 +2,14 @@
 
 namespace App\Models;
 
+use App\Orchid\Presenters\Institution\InstitutionPresenter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
+use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Screen\AsSource;
 
 /**
@@ -17,14 +23,17 @@ use Orchid\Screen\AsSource;
  * @property string $time_of_work
  * @property string $phone
  * @property boolean $active
- * @property array $slider_images_links
  * @property string $about_detail_text
  */
 class Institution extends Model
 {
-    use AsSource;
+    use AsSource, Filterable, Attachable;
 
     protected $table = 'institutions';
+
+    private const TYPES_OF_INSTITUTIONS = [
+        'Ресторан', 'Караоке', 'Сауна',
+    ];
 
     public const FILLABLE = [
         'name',
@@ -36,18 +45,49 @@ class Institution extends Model
         'time_of_work',
         'phone',
         'active',
-        'slider_images_links',
         'about_detail_text',
     ];
 
     protected $fillable = self::FILLABLE;
 
-    protected $casts = [
-        'slider_images_links' => 'array',
+    protected array $allowedFilters = [
+        'id' => Where::class,
+        'name' => Like::class,
+        'type' => Like::class,
+        'active' => Where::class,
+        'updated_at' => WhereDateStartEnd::class,
+        'created_at' => WhereDateStartEnd::class,
+    ];
+
+    protected array $allowedSorts = [
+        'name',
+        'type',
+        'city',
+        'address',
+        'full_address',
+        'menu_link',
+        'time_of_work',
+        'phone',
+        'active',
+        'about_detail_text',
     ];
 
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function presenter(): InstitutionPresenter
+    {
+        return new InstitutionPresenter($this);
+    }
+
+    public static function getTypes(): array
+    {
+        return collect(static::TYPES_OF_INSTITUTIONS)->map(function ($type) {
+            return [$type => $type];
+        })
+            ->collapse()
+            ->toArray();
     }
 }

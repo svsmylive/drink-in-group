@@ -3,12 +3,11 @@
 namespace App\Orchid\Screens\Institution;
 
 use App\Models\Institution;
-use App\Orchid\Layouts\User\UserEditLayout;
-use App\Orchid\Layouts\User\UserFiltersLayout;
-use App\Orchid\Layouts\User\UserListLayout;
+use App\Orchid\Layouts\Institution\InstitutionListLayout;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class InstitutionListScreen extends Screen
 {
@@ -20,7 +19,7 @@ class InstitutionListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'institutions' => Institution::paginate(),
+            'institutions' => Institution::filters()->defaultSort('id')->paginate(),
         ];
     }
 
@@ -44,7 +43,7 @@ class InstitutionListScreen extends Screen
         return [
             Link::make(__('Добавить'))
                 ->icon('bs.plus-circle')
-                ->route('platform.systems.users.create'),
+                ->route('platform.systems.institutions.create'),
         ];
     }
 
@@ -56,11 +55,14 @@ class InstitutionListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            UserFiltersLayout::class,
-            UserListLayout::class,
-
-            Layout::modal('asyncEditUserModal', UserEditLayout::class)
-                ->async('asyncGetUser'),
+            InstitutionListLayout::class,
         ];
+    }
+
+    public function remove(Request $request): void
+    {
+        Institution::findOrFail($request->get('id'))->delete();
+
+        Toast::info(__('Заведение было успешно удалено'));
     }
 }

@@ -21,7 +21,6 @@ class InstitutionsResource extends JsonResource
             'time_of_work' => $this->time_of_work,
             'phone' => $this->phone,
             'active' => $this->active,
-            'slider_images_links' => $this->slider_images_links,
             'about_detail_text' => $this->about_detail_text,
         ];
     }

@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->string('time_of_work')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('active')->default(true);
-            $table->json('slider_images_links')->nullable();
             $table->string('about_detail_text')->nullable();
 //            $table->string('about_restaurant_detail_images_link');
             $table->timestamps();

@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('institution_id');
             $table->string('name')->nullable();
             $table->string('text')->nullable();
-            $table->date('date')->nullable();
-            $table->time('time')->nullable();
+            $table->string('date')->nullable();
+            $table->string('time')->nullable();
             $table->string('path_to_image')->nullable();
 
             $table->foreign('institution_id')
