@@ -29,11 +29,7 @@ class SaveInstitutionRequest extends FormRequest
             'institution.active' => ['nullable', 'bool'],
             'institution.attachment' => ['nullable', 'array'],
             'institution.about_detail_text' => ['nullable', 'string'],
-            'event.*.name' => ['nullable', 'string'],
-            'event.*.text' => ['nullable', 'string'],
-            'event.*.date' => ['nullable', 'string'],
-            'event.*.time' => ['nullable', 'string'],
-            'event.*.image' => ['nullable', File::types(['jpg, webp', 'png'])],
+            'events' => ['nullable', 'array'],
         ];
     }
 }

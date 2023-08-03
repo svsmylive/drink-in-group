@@ -53,6 +53,12 @@ class InstitutionEditLayout extends Rows
                 ->placeholder(__('Меню PDF'))
                 ->help('Название файла меню должно быть уникальным'),
 
+            Input::make('institution.menu_link')
+                ->type('text')
+                ->title(__('Ссылка на меню'))
+                ->readonly()
+                ->placeholder(__('Ссылка на меню')),
+
             Input::make('institution.time_of_work')
                 ->type('text')
                 ->title(__('Время работы'))

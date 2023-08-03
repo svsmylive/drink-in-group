@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Event\EventsEditScreen;
+use App\Orchid\Screens\Event\EventsListScreen;
 use App\Orchid\Screens\Examples\ExampleActionsScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -105,8 +107,11 @@ Route::screen('roles', RoleListScreen::class)
 
 
 Route::screen('institutions', InstitutionListScreen::class)->name('platform.systems.institutions');
-
 Route::screen('institutions/{institution}/edit', InstitutionEditScreen::class)->name('platform.systems.institutions.edit');
-
 Route::screen('institutions/create', InstitutionEditScreen::class)
     ->name('platform.systems.institutions.create');
+
+
+Route::screen('events', EventsListScreen::class)->name('platform.systems.events');
+Route::screen('events/create', EventsEditScreen::class)->name('platform.systems.events.create');
+Route::screen('events/{event}/edit', EventsEditScreen::class)->name('platform.systems.events.edit');

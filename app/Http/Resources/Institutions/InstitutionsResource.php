@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Institutions;
 
+use App\Http\Resources\Attachments\AttachmentsResource;
+use App\Http\Resources\Events\EventsResource;
 use App\Models\Institution;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +24,8 @@ class InstitutionsResource extends JsonResource
             'phone' => $this->phone,
             'active' => $this->active,
             'about_detail_text' => $this->about_detail_text,
+            'slider_images' => AttachmentsResource::collection($this->attachment()->get()),
+            'events' => EventsResource::collection($this->whenNotNull($this->events()->exists() ? $this->events()->get() : null))
         ];
     }
 }

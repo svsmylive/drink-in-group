@@ -14,12 +14,11 @@ return new class extends Migration {
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('institution_id');
+            $table->unsignedBigInteger('institution_id')->nullable();
             $table->string('name')->nullable();
             $table->string('text')->nullable();
             $table->string('date')->nullable();
             $table->string('time')->nullable();
-            $table->string('path_to_image')->nullable();
 
             $table->foreign('institution_id')
                 ->references('id')

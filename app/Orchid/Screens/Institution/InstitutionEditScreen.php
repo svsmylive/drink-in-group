@@ -8,6 +8,7 @@ use App\Models\Institution;
 use App\Orchid\Layouts\Institution\InstitutionEditLayout;
 use App\Orchid\Layouts\Institution\InstitutionEventsLayout;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -29,10 +30,11 @@ class InstitutionEditScreen extends Screen
      */
     public function query(Institution $institution): iterable
     {
-        $institution->load('attachment');
+        $institution->load(['attachment', 'events']);
 
         return [
             'institution' => $institution,
+            'events' => $institution->events
         ];
     }
 
@@ -68,7 +70,14 @@ class InstitutionEditScreen extends Screen
             Layout::block(InstitutionEventsLayout::class)
                 ->title(__('События'))
                 ->description(__('Собития в заведении'))
-                ->vertical(),
+                ->vertical()
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::BASIC)
+                        ->icon('bs.check-circle')
+                        ->canSee($this->institution->exists)
+                        ->method('save')
+                ),
         ];
     }
 

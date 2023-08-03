@@ -50,8 +50,9 @@ class Institution extends Model
 
     protected $fillable = self::FILLABLE;
 
+    protected $with = ['events'];
+
     protected array $allowedFilters = [
-        'id' => Where::class,
         'name' => Like::class,
         'type' => Like::class,
         'active' => Where::class,
@@ -70,6 +71,7 @@ class Institution extends Model
         'phone',
         'active',
         'about_detail_text',
+        'updated_at',
     ];
 
     public function events(): HasMany
