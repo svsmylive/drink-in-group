@@ -7,8 +7,8 @@ use App\Http\Requests\SaveInstitutionRequest;
 use App\Models\Institution;
 use App\Orchid\Layouts\Institution\InstitutionEditLayout;
 use App\Orchid\Layouts\Institution\InstitutionEventsLayout;
+use App\Orchid\Layouts\Institution\InstitutionServicesAndPricesEditLayout;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -34,7 +34,7 @@ class InstitutionEditScreen extends Screen
 
         return [
             'institution' => $institution,
-            'events' => $institution->events
+            'events' => $institution->events,
         ];
     }
 
@@ -56,7 +56,7 @@ class InstitutionEditScreen extends Screen
 
     public function layout(): iterable
     {
-        return [
+        $layouts = [
             Layout::block(InstitutionEditLayout::class)
                 ->title(__('Общая информация о заведении'))
                 ->vertical()
@@ -79,6 +79,21 @@ class InstitutionEditScreen extends Screen
                         ->method('save')
                 ),
         ];
+
+        if ($this->institution->type == Institution::SAUNA_TYPE) {
+            $layouts[] = Layout::block(InstitutionServicesAndPricesEditLayout::class)
+                ->title(__('Услуги и цены'))
+                ->vertical()
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::BASIC)
+                        ->icon('bs.check-circle')
+                        ->canSee($this->institution->exists)
+                        ->method('save')
+                );
+        }
+
+        return $layouts;
     }
 
     public function save(Institution $institution, SaveInstitutionRequest $request, SaveInstitutionAction $action): RedirectResponse

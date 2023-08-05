@@ -4,10 +4,10 @@ namespace App\Actions;
 
 use App\Models\Institution;
 use Illuminate\Support\Arr;
+use Orchid\Attachment\File;
 
 class SaveInstitutionAction
 {
-
     public function __construct(private readonly SyncInstitutionEventsAction $syncInstitutionEventsAction)
     {
     }
@@ -16,27 +16,16 @@ class SaveInstitutionAction
     {
         $institutionData = $data['institution'];
         $fields = Arr::only($institutionData, Institution::FILLABLE);
-        $sliderImages = $institutionData['attachment'] ?? null;
-        $institutionMenu = $institutionData['menu'] ?? null;
         $eventData = $data['events'] ?? null;
 
         $institution->fill($fields);
         $institution->save();
-
-        if ($sliderImages) {
-            $institution->attachment()->sync($sliderImages);
-        }
-
-        if ($institutionMenu) {
-            $file = request()->file('institution.menu');
-            $filePath = 'menu/' . $institution->name;
-            $path = $file->storeAs($filePath, $file->getClientOriginalName());
-            $institution->menu_link = '/storage/' . $path;
-            $institution->save();
-        }
+        $institution->attachment()->sync($institutionData['attachment']);
 
         if ($eventData) {
             $this->syncInstitutionEventsAction->execute($institution, $eventData);
         }
+
+        $institution->save();
     }
 }

@@ -28,6 +28,8 @@ class EventsEditScreen extends Screen
      */
     public function query(Event $event): iterable
     {
+        $event->load('attachment');
+
         return [
             'event' => $event
         ];

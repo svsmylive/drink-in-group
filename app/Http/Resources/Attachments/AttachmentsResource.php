@@ -14,7 +14,7 @@ class AttachmentsResource extends JsonResource
             'original_name' => $this->original_name,
             'extension' => $this->extension,
             'size' => $this->size,
-            'path' => $this->path,
+            'url' => '/storage/' . $this->path . $this->name . '.' . $this->extension,
         ];
     }
 }

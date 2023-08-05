@@ -20,12 +20,20 @@ return new class extends Migration {
             $table->string('city')->nullable();
             $table->string('address')->nullable();
             $table->string('full_address')->nullable();
-            $table->string('menu_link')->nullable();
             $table->string('time_of_work')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('active')->default(true);
-            $table->string('about_detail_text')->nullable();
-//            $table->string('about_restaurant_detail_images_link');
+            $table->string('about_detail_text_header')->nullable();
+            $table->string('about_detail_text_body')->nullable();
+            $table->string('about_detail_text_footer')->nullable();
+            $table->string('event_text_footer')->nullable();
+            $table->string('event_text_header')->nullable();
+            $table->string('services_and_prices_text_header')->nullable();
+            $table->string('services_and_prices_text_footer')->nullable();
+            $table->string('services_and_prices_capacity')->nullable();
+            $table->string('services_and_prices_price')->nullable();
+            $table->json('services_and_prices_include')->nullable();
+            $table->json('services_and_prices_additionally_include')->nullable();
             $table->timestamps();
         });
 

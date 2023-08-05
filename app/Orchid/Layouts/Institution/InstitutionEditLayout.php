@@ -47,17 +47,12 @@ class InstitutionEditLayout extends Rows
                 ->title(__('Полный адрес'))
                 ->placeholder(__('Город, улица')),
 
-            Input::make('institution.menu')
-                ->type('file')
+            Upload::make('institution.attachment')
+                ->groups('menu')
+                ->maxFiles(1)
+                ->acceptedFiles('application/pdf')
                 ->title(__('Меню PDF'))
-                ->placeholder(__('Меню PDF'))
-                ->help('Название файла меню должно быть уникальным'),
-
-            Input::make('institution.menu_link')
-                ->type('text')
-                ->title(__('Ссылка на меню'))
-                ->readonly()
-                ->placeholder(__('Ссылка на меню')),
+                ->placeholder(__('Меню PDF')),
 
             Input::make('institution.time_of_work')
                 ->type('text')
@@ -72,18 +67,51 @@ class InstitutionEditLayout extends Rows
 
             CheckBox::make('institution.active')
                 ->title(__('Активность'))
+                ->sendTrueOrFalse()
                 ->placeholder(__('Активность'))
                 ->help('Будет ли заведение активно'),
 
             Upload::make('institution.attachment')
+                ->groups('logo')
+                ->maxFiles(1)
+                ->acceptedFiles('image/*,application/pdf,.psd')
+                ->title(__('Логотип заведения'))
+                ->placeholder(__('Логотип заведения')),
+
+            Upload::make('institution.attachment')
+                ->groups('sliderImages')
                 ->title(__('Изображения слайдера'))
                 ->placeholder(__('Изображения слайдера')),
 
-            TextArea::make('institution.about_detail_text')
-                ->title(__('Детальный текст'))
-                ->placeholder(__('Детальный текст'))
-                ->rows(5),
+            TextArea::make('institution.about_detail_text_header')
+                ->title(__('Детальный текст на странице "О ресторане" Header'))
+                ->placeholder(__('about detail text header'))
+                ->rows(3),
+
+            TextArea::make('institution.about_detail_text_body')
+                ->title(__('Детальный текст на странице "О ресторане" Body'))
+                ->placeholder(__('about detail text body'))
+                ->rows(3),
+
+            TextArea::make('institution.about_detail_text_footer')
+                ->title(__('Детальный текст на странице "О ресторане" Footer'))
+                ->placeholder(__('about detail text footer'))
+                ->rows(3),
+
+            TextArea::make('institution.event_text_header')
+                ->title(__('"События" header текст'))
+                ->placeholder(__('event text header'))
+                ->rows(3),
+
+            TextArea::make('institution.event_text_footer')
+                ->title(__('"События" Footer текст'))
+                ->placeholder(__('event text footer'))
+                ->rows(3),
+
+            Upload::make('institution.attachment')
+                ->groups('detailImages')
+                ->title(__('Изображения на детальной странице'))
+                ->placeholder(__('Изображения на детальной странице')),
         ];
     }
-
 }
