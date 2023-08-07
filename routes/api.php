@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\FeedbacksController;
 use App\Http\Controllers\InstitutionsController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/institutions', [InstitutionsController::class, 'get']);
 Route::get('/institutions/{id}', [InstitutionsController::class, 'getById']);
+
+Route::post('/feedbacks', [FeedbacksController::class, 'create']);

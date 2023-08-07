@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SaveEventRequest extends FormRequest
 {
-    public function toArray(): array
+    public function rules(): array
     {
         return [
             'event.name' => ['required', 'string'],
@@ -15,5 +15,10 @@ class SaveEventRequest extends FormRequest
             'event.time' => ['nullable', 'string'],
             'event.attachment' => ['nullable', 'array'],
         ];
+    }
+
+    public function authorize(): bool
+    {
+        return true;
     }
 }
