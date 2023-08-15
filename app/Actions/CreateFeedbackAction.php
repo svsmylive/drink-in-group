@@ -14,6 +14,6 @@ class CreateFeedbackAction
 
         FeedbackCreate::dispatch($feedBack);
 
-        return ['success' => true];
+        return ['data' => $feedBack];
     }
 }

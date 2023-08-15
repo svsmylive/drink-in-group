@@ -6,7 +6,7 @@ use App\Actions\CreateFeedbackAction;
 use App\Http\Requests\CreateFeedbackRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeedbacksController extends Controller
+class FeedbacksController
 {
     public function create(CreateFeedbackRequest $request, CreateFeedbackAction $action): JsonResource
     {

@@ -23,10 +23,11 @@ class SendTelegramNotification implements ShouldQueue
     public function handle(FeedbackCreate $event): void
     {
         $message = $this->getMessage($event->feedback);
+        $apiKey = config('telegram.api_key');
+        $chatId = config('telegram.chat_id');
 
-
-        Http::post('https://api.telegram.org/bot6598786870:AAFvft2eRATeyxlbWAshod4FN8nPN5PNIPw/sendMessage', [
-            'chat_id' => '584625154',
+        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+            'chat_id' => $chatId,
             'text' => $message,
         ]);
     }
