@@ -36,7 +36,9 @@ class InstitutionPresenter extends Presenter implements Searchable, Personable
 
     public function url(): string
     {
-        return route('platform.systems.institutions.edit', $this->entity);
+        return $this->entity->type == 'Главная' ?
+            route('platform.systems.institutions.main.edit', $this->entity) :
+            route('platform.systems.institutions.edit', $this->entity);
     }
 
     public function image(): ?string

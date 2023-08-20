@@ -6,6 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+    public $withinTransaction = true;
     /**
      * Run the migrations.
      *
@@ -32,6 +34,8 @@ return new class extends Migration {
             $table->string('services_and_prices_text_footer')->nullable();
             $table->string('services_and_prices_capacity')->nullable();
             $table->string('services_and_prices_price')->nullable();
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
             $table->json('services_and_prices_include')->nullable();
             $table->json('services_and_prices_additionally_include')->nullable();
             $table->timestamps();
@@ -52,10 +56,10 @@ return new class extends Migration {
 
     private function createRecords(): void
     {
-        $institutionsNames = ['БЕЛЫЙ ГРИБ', 'БЕЛЫЙ ГРИБ', 'ВИНО И МОРЕ', 'КАМЕЛОТ', 'ГОЛОС', 'РИМСКИЕ КАНИКУЛЫ'];
-        $institutionsTypes = ['Ресторан', 'Ресторан', 'Ресторан', 'Ресторан', 'Караоке', 'Сауна'];
-        $institutionsCities = ['Красная Поляна', 'Краснодар', 'Анапа', 'Краснодар', 'Краснодар', 'Краснодар'];
-        $institutionsAddresses = ['ул. Горная, 11', 'ул. Васнецова, 16', 'ул. Набережная, 27', 'ул. Васнецова, 16', 'ул. Васнецова, 16', 'ул. Васнецова, 16'];
+        $institutionsNames = ['БЕЛЫЙ ГРИБ', 'БЕЛЫЙ ГРИБ', 'ВИНО И МОРЕ', 'КАМЕЛОТ', 'ГОЛОС', 'РИМСКИЕ КАНИКУЛЫ', 'ГЛАВНАЯ СТРАНИЦА С ЗАВЕДЕНИЯМИ SEO'];
+        $institutionsTypes = ['Ресторан', 'Ресторан', 'Ресторан', 'Ресторан', 'Караоке', 'Сауна', 'Главная'];
+        $institutionsCities = ['Красная Поляна', 'Краснодар', 'Анапа', 'Краснодар', 'Краснодар', 'Краснодар', null];
+        $institutionsAddresses = ['ул. Горная, 11', 'ул. Васнецова, 16', 'ул. Набережная, 27', 'ул. Васнецова, 16', 'ул. Васнецова, 16', 'ул. Васнецова, 16', null];
         $data = [];
 
         foreach ($institutionsNames as $key => $institutionsName) {

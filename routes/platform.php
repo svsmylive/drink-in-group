@@ -6,6 +6,7 @@ use App\Orchid\Screens\Event\EventsEditScreen;
 use App\Orchid\Screens\Event\EventsListScreen;
 use App\Orchid\Screens\Institution\InstitutionEditScreen;
 use App\Orchid\Screens\Institution\InstitutionListScreen;
+use App\Orchid\Screens\Institution\InstitutionMainEditScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -102,6 +103,8 @@ Route::screen('institutions', InstitutionListScreen::class)->name('platform.syst
 Route::screen('institutions/{institution}/edit', InstitutionEditScreen::class)->name('platform.systems.institutions.edit');
 Route::screen('institutions/create', InstitutionEditScreen::class)
     ->name('platform.systems.institutions.create');
+//настройка сео главной страницы
+Route::screen('institutions/{institution}/main/edit', InstitutionMainEditScreen::class)->name('platform.systems.institutions.main.edit');
 
 
 Route::screen('events', EventsListScreen::class)->name('platform.systems.events');

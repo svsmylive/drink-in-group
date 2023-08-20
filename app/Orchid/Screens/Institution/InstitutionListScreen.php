@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Institution;
 
 use App\Models\Institution;
 use App\Orchid\Layouts\Institution\InstitutionListLayout;
+use App\Orchid\Layouts\Institution\InstitutionMainPageLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
@@ -19,7 +20,8 @@ class InstitutionListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'institutions' => Institution::filters()->defaultSort('id')->paginate(),
+            'institutions' => Institution::filters()->defaultSort('id')->whereIn('type', Institution::getTypes())->paginate(),
+            'main_page' => Institution::whereNotIn('type', Institution::getTypes())->paginate(),
         ];
     }
 
@@ -56,6 +58,7 @@ class InstitutionListScreen extends Screen
     {
         return [
             InstitutionListLayout::class,
+            InstitutionMainPageLayout::class,
         ];
     }
 

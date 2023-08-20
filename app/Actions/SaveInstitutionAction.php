@@ -17,10 +17,14 @@ class SaveInstitutionAction
         $institutionData = $data['institution'];
         $fields = Arr::only($institutionData, Institution::FILLABLE);
         $eventData = $data['events'] ?? null;
+        $attachment = $institutionData['attachment'] ?? null;
 
         $institution->fill($fields);
         $institution->save();
-        $institution->attachment()->sync($institutionData['attachment']);
+
+        if ($attachment) {
+            $institution->attachment()->sync($attachment);
+        }
 
         if ($eventData) {
             $this->syncInstitutionEventsAction->execute($institution, $eventData);

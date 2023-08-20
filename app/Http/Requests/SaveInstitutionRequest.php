@@ -26,6 +26,8 @@ class SaveInstitutionRequest extends FormRequest
             'institution.phone' => ['nullable', 'string'],
             'institution.active' => ['nullable', 'bool'],
             'institution.attachment' => ['nullable', 'array'],
+            'institution.title' => ['nullable', 'string'],
+            'institution.description' => ['nullable', 'string'],
             'institution.about_detail_text_header' => ['nullable', 'string'],
             'institution.about_detail_text_body' => ['nullable', 'string'],
             'institution.about_detail_text_footer' => ['nullable', 'string'],

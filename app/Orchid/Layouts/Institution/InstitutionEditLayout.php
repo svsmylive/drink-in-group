@@ -79,9 +79,24 @@ class InstitutionEditLayout extends Rows
                 ->placeholder(__('Логотип заведения')),
 
             Upload::make('institution.attachment')
-                ->groups('sliderImages')
-                ->title(__('Изображения слайдера'))
-                ->placeholder(__('Изображения слайдера')),
+                ->groups('sliderImagesDesktop')
+                ->title(__('Изображения слайдера Desktop'))
+                ->placeholder(__('Изображения слайдера desktop')),
+
+            Upload::make('institution.attachment')
+                ->groups('sliderImagesMobile')
+                ->title(__('Изображения слайдера Mobile'))
+                ->placeholder(__('Изображения слайдера mobile')),
+
+            Input::make('institution.title')
+                ->type('text')
+                ->title(__('SEO Title'))
+                ->placeholder(__('seo title')),
+
+            TextArea::make('institution.description')
+                ->title(__('SEO Description'))
+                ->rows(3)
+                ->placeholder(__('seo description')),
 
             TextArea::make('institution.about_detail_text_header')
                 ->title(__('Детальный текст на странице "О ресторане" Header'))

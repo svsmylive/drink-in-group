@@ -26,6 +26,8 @@ use Orchid\Screen\AsSource;
  * @property string $about_detail_text_header
  * @property string $about_detail_text_body
  * @property string $about_detail_text_footer
+ * @property string $title
+ * @property string $description
  * @property string $event_text_header
  * @property string $event_text_footer
  * @property string $services_and_prices_text_header
@@ -71,12 +73,15 @@ class Institution extends Model
         'about_detail_text_body',
         'about_detail_text_footer',
         'event_text_header',
+        'event_text_footer',
         'services_and_prices_text_header',
         'services_and_prices_text_footer',
         'services_and_prices_capacity',
         'services_and_prices_price',
         'services_and_prices_include',
         'services_and_prices_additionally_include',
+        'title',
+        'description',
     ];
 
     protected $fillable = self::FILLABLE;
@@ -150,9 +155,14 @@ class Institution extends Model
         return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'detailImages');
     }
 
-    public function sliderImages(): MorphToMany
+    public function sliderImagesDesktop(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'sliderImages');
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'sliderImagesDesktop');
+    }
+
+    public function sliderImagesMobile(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'sliderImagesMobile');
     }
 
     public function logo(): MorphToMany

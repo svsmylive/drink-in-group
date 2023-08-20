@@ -24,6 +24,8 @@ class InstitutionsResource extends JsonResource
             'phone' => $this->phone,
             'active' => $this->active,
             'logo' => new AttachmentsResource($this->whenNotNull($this->logo()->exists() ? $this->logo()->first() : null)),
+            'title' => $this->title,
+            'description' => $this->description,
             'about' => [
                 'about_detail_text_header' => $this->about_detail_text_header,
                 'about_detail_text_body' => $this->about_detail_text_body,
@@ -35,7 +37,8 @@ class InstitutionsResource extends JsonResource
                 'event_text_footer' => $this->event_text_footer,
                 'image' => EventsResource::collection($this->whenNotNull($this->events()->exists() ? $this->events()->get() : null)),
             ],
-            'slider_images' => AttachmentsResource::collection($this->whenNotNull($this->sliderImages()->exists() ? $this->sliderImages()->get() : null)),
+            'slider_images_desktop' => AttachmentsResource::collection($this->whenNotNull($this->sliderImagesDesktop()->exists() ? $this->sliderImagesDesktop()->get() : null)),
+            'slider_images_mobile' => AttachmentsResource::collection($this->whenNotNull($this->sliderImagesMobile()->exists() ? $this->sliderImagesMobile()->get() : null)),
             'sauna_services_and_prices' => $this->when($this->type == Institution::SAUNA_TYPE, function () {
                 return [
                     'services_and_prices_text_header' => $this->services_and_prices_text_header,
