@@ -18,7 +18,7 @@ return new class extends Migration {
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('type', ['Ресторан', 'Сауна', 'Караоке'])->nullable();
+            $table->enum('type', ['Ресторан', 'Сауна', 'Караоке', 'Главная'])->nullable();
             $table->string('city')->nullable();
             $table->string('address')->nullable();
             $table->string('full_address')->nullable();
