@@ -17,5 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/institutions', [InstitutionsController::class, 'get']);
 Route::get('/institutions/{id}', [InstitutionsController::class, 'getById']);
+Route::get('/institutions/main/page', [InstitutionsController::class, 'getMainPageInfo']);
 
 Route::post('/feedbacks', [FeedbacksController::class, 'create']);

@@ -9,6 +9,6 @@ class GetInstitutionsAction
 {
     public function execute(): Collection
     {
-        return Institution::all();
+        return Institution::query()->whereIn('type', Institution::getTypes())->get();
     }
 }
