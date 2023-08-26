@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\MakeUrlFromNameAction;
 use App\Models\Institution;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
 
     public $withinTransaction = true;
+
     /**
      * Run the migrations.
      *
@@ -36,6 +38,7 @@ return new class extends Migration {
             $table->string('services_and_prices_price')->nullable();
             $table->string('title')->nullable();
             $table->string('description')->nullable();
+            $table->string('url')->nullable();
             $table->json('services_and_prices_include')->nullable();
             $table->json('services_and_prices_additionally_include')->nullable();
             $table->timestamps();
@@ -65,6 +68,7 @@ return new class extends Migration {
         foreach ($institutionsNames as $key => $institutionsName) {
             $data[] = [
                 'name' => $institutionsName,
+                'url' => $this->makeUrlFromName($institutionsName),
                 'type' => $institutionsTypes[$key],
                 'city' => $institutionsCities[$key],
                 'address' => $institutionsAddresses[$key],
@@ -73,5 +77,10 @@ return new class extends Migration {
         }
 
         Institution::query()->insert($data);
+    }
+
+    private function makeUrlFromName(string $name): string
+    {
+        return resolve(MakeUrlFromNameAction::class)->execute($name);
     }
 };

@@ -98,6 +98,11 @@ class InstitutionEditLayout extends Rows
                 ->rows(3)
                 ->placeholder(__('seo description')),
 
+            Input::make('institution.url')
+                ->type('text')
+                ->title(__('SEO url'))
+                ->placeholder(__('seo url')),
+
             TextArea::make('institution.about_detail_text_header')
                 ->title(__('Детальный текст на странице "О ресторане" Header'))
                 ->placeholder(__('about detail text header'))

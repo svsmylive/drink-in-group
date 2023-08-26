@@ -28,6 +28,7 @@ use Orchid\Screen\AsSource;
  * @property string $about_detail_text_footer
  * @property string $title
  * @property string $description
+ * @property string $url
  * @property string $event_text_header
  * @property string $event_text_footer
  * @property string $services_and_prices_text_header
@@ -82,6 +83,7 @@ class Institution extends Model
         'services_and_prices_additionally_include',
         'title',
         'description',
+        'url',
     ];
 
     protected $fillable = self::FILLABLE;
@@ -178,5 +180,35 @@ class Institution extends Model
     public function saunaImage(): MorphToMany
     {
         return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'saunaImage');
+    }
+
+    public function menuBackgroundImage(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'menuBackgroundImage');
+
+    }
+
+    public function institutionBackgroundImage(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'institutionBackgroundImage');
+
+    }
+
+    public function reserveBackgroundImage(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'reserveBackgroundImage');
+
+    }
+
+    public function eventBackgroundImage(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'eventBackgroundImage');
+
+    }
+
+    public function priceAndServicesBackgroundImage(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'priceAndServicesBackgroundImage');
+
     }
 }

@@ -49,7 +49,14 @@ class InstitutionsResource extends JsonResource
                     'services_and_prices_additionally_include' => $this->services_and_prices_additionally_include,
                     'image' => new AttachmentsResource($this->whenNotNull($this->saunaImage()->exists() ? $this->saunaImage()->first() : null))
                 ];
-            })
+            }),
+            'background_images' => [
+                'menu' => new AttachmentsResource($this->whenNotNull($this->menuBackgroundImage()->exists() ? $this->menuBackgroundImage()->first() : null)),
+                'about' => new AttachmentsResource($this->whenNotNull($this->institutionBackgroundImage()->exists() ? $this->institutionBackgroundImage()->first() : null)),
+                'events' => new AttachmentsResource($this->whenNotNull($this->eventBackgroundImage()->exists() ? $this->eventBackgroundImage()->first() : null)),
+                'reserve' => new AttachmentsResource($this->whenNotNull($this->reserveBackgroundImage()->exists() ? $this->reserveBackgroundImage()->first() : null)),
+                'services' => new AttachmentsResource($this->whenNotNull($this->priceAndServicesBackgroundImage()->exists() ? $this->priceAndServicesBackgroundImage()->first() : null)),
+            ],
         ];
     }
 }

@@ -14,7 +14,7 @@ class InstitutionEventsLayout extends Rows
             Relation::make('events.')
                 ->fromModel(Event::class, 'name')
                 ->applyScope('FreeRelation')
-                ->title('Выбирите свободные собития из списка')
+                ->title('Выбирите свободные события из списка')
                 ->multiple(),
         ];
     }

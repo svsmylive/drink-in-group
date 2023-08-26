@@ -24,6 +24,7 @@ class SaveInstitutionRequest extends FormRequest
             'institution.full_address' => ['nullable', 'string'],
             'institution.time_of_work' => ['nullable', 'string'],
             'institution.phone' => ['nullable', 'string'],
+            'institution.url' => ['nullable', 'string'],
             'institution.active' => ['nullable', 'bool'],
             'institution.attachment' => ['nullable', 'array'],
             'institution.title' => ['nullable', 'string'],

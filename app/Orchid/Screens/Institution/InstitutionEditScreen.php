@@ -5,6 +5,8 @@ namespace App\Orchid\Screens\Institution;
 use App\Actions\SaveInstitutionAction;
 use App\Http\Requests\SaveInstitutionRequest;
 use App\Models\Institution;
+use App\Orchid\Layouts\Institution\BackgroundInstitutionImageEditLayout;
+use App\Orchid\Layouts\Institution\BackgroundSaunaImageEditLayout;
 use App\Orchid\Layouts\Institution\InstitutionEditLayout;
 use App\Orchid\Layouts\Institution\InstitutionEventsLayout;
 use App\Orchid\Layouts\Institution\InstitutionServicesAndPricesEditLayout;
@@ -69,7 +71,7 @@ class InstitutionEditScreen extends Screen
                 ),
             Layout::block(InstitutionEventsLayout::class)
                 ->title(__('События'))
-                ->description(__('Собития в заведении'))
+                ->description(__('События в заведении'))
                 ->vertical()
                 ->commands(
                     Button::make(__('Save'))
@@ -83,6 +85,27 @@ class InstitutionEditScreen extends Screen
         if ($this->institution->type == Institution::SAUNA_TYPE) {
             $layouts[] = Layout::block(InstitutionServicesAndPricesEditLayout::class)
                 ->title(__('Услуги и цены'))
+                ->vertical()
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::BASIC)
+                        ->icon('bs.check-circle')
+                        ->canSee($this->institution->exists)
+                        ->method('save')
+                );
+            $layouts[] = Layout::block(BackgroundSaunaImageEditLayout::class)
+                ->title(__('Фоновые изображения для элементов меню'))
+                ->vertical()
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::BASIC)
+                        ->icon('bs.check-circle')
+                        ->canSee($this->institution->exists)
+                        ->method('save')
+                );
+        } else {
+            $layouts[] = Layout::block(BackgroundInstitutionImageEditLayout::class)
+                ->title(__('Фоновые изображения для элементов меню'))
                 ->vertical()
                 ->commands(
                     Button::make(__('Save'))
