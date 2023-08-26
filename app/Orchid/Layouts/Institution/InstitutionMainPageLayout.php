@@ -26,10 +26,10 @@ class InstitutionMainPageLayout extends Table
                 ->filter(Input::make())
                 ->render(fn(Institution $institution) => new Persona($institution->presenter())),
 
-            TD::make('active', __('Title'))
+            TD::make('title', __('Title'))
                 ->sort(),
 
-            TD::make('type', __('Description'))
+            TD::make('description', __('Description'))
                 ->sort(),
 
             TD::make(__('Actions'))
