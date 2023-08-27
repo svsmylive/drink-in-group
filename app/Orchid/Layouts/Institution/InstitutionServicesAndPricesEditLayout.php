@@ -21,12 +21,12 @@ class InstitutionServicesAndPricesEditLayout extends Rows
     {
         return [
             TextArea::make('institution.services_and_prices_text_header')
-                ->rows(3)
+                ->rows(6)
                 ->title(__('Услуги и цены текст header'))
                 ->placeholder(__('Услуги и цены текст header')),
 
             TextArea::make('institution.services_and_prices_text_footer')
-                ->rows(3)
+                ->rows(6)
                 ->title(__('Услуги и цены текст footer'))
                 ->placeholder(__('Услуги и цены текст footer')),
 

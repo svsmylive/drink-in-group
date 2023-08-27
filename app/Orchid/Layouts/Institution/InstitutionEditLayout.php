@@ -106,27 +106,27 @@ class InstitutionEditLayout extends Rows
             TextArea::make('institution.about_detail_text_header')
                 ->title(__('Детальный текст на странице "О ресторане" Header'))
                 ->placeholder(__('about detail text header'))
-                ->rows(3),
+                ->rows(6),
 
             TextArea::make('institution.about_detail_text_body')
                 ->title(__('Детальный текст на странице "О ресторане" Body'))
                 ->placeholder(__('about detail text body'))
-                ->rows(3),
+                ->rows(6),
 
             TextArea::make('institution.about_detail_text_footer')
                 ->title(__('Детальный текст на странице "О ресторане" Footer'))
                 ->placeholder(__('about detail text footer'))
-                ->rows(3),
+                ->rows(6),
 
             TextArea::make('institution.event_text_header')
                 ->title(__('"События" header текст'))
                 ->placeholder(__('event text header'))
-                ->rows(3),
+                ->rows(6),
 
             TextArea::make('institution.event_text_footer')
                 ->title(__('"События" Footer текст'))
                 ->placeholder(__('event text footer'))
-                ->rows(3),
+                ->rows(6),
 
             Upload::make('institution.attachment')
                 ->groups('detailImages')
