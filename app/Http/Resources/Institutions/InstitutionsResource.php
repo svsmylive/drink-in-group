@@ -26,6 +26,7 @@ class InstitutionsResource extends JsonResource
             'logo' => new AttachmentsResource($this->whenNotNull($this->logo()->exists() ? $this->logo()->first() : null)),
             'title' => $this->title,
             'description' => $this->description,
+            'url' => $this->url,
             'about' => [
                 'about_detail_text_header' => $this->about_detail_text_header,
                 'about_detail_text_body' => $this->about_detail_text_body,
