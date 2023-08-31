@@ -4,6 +4,19 @@ type Emits = {
 };
 
 const emits = defineEmits<Emits>();
+
+const maxWidth =  computed(() => {
+  switch(useLayoutSize()) {
+    case 'XS':
+      return '90%';
+    case 'S':
+      return '85%';
+    case 'M':
+      return '793px';
+    case 'L':
+      return '1160px';
+  }
+});
 </script>
 
 <template>
@@ -47,7 +60,7 @@ const emits = defineEmits<Emits>();
   text-align: center;
   z-index: 1000;
   background-color: $color-white;
-  width: 80%;
+  // width: 70%;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -55,6 +68,8 @@ const emits = defineEmits<Emits>();
   padding: 20px;
   min-height: 40vh;
   max-height: 90vh;
+  width: v-bind(maxWidth);
+  max-width: v-bind(maxWidth);
   overflow-x: hidden;
   overflow-y: auto;
 }

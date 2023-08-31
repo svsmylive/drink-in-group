@@ -1,7 +1,5 @@
 export type LayoutSize = 'XS' | 'S' | 'M' | 'L';
 
-// import { useBreakpoints } from '@vueuse/core';
-
 const breakpoints = useBreakpoints({
   xs: 768,
   s: 1024,
@@ -11,7 +9,6 @@ const breakpoints = useBreakpoints({
 const xs = breakpoints.smaller('xs');
 const s = breakpoints.between('xs', 's');
 const m = breakpoints.between('s', 'm');
-// const l = breakpoints.greater('m');
 
 export function useLayoutSize(): LayoutSize {
   if (xs.value) {
