@@ -15,7 +15,7 @@ const emits = defineEmits<Emits>();
 <template>
   <div class="d-popup">
     <div class="d-popup__header">
-      <img v-if="logo" class="d-popup__logo" :src="logo" />
+      <img v-if="logo" class="d-popup__logo" :src="logo" @click="emits('close')" />
       <DIcon
         style="margin-left: auto;"
         :style="{ fontSize: useLayoutSize() == 'XS' ? '20px' : '40px', }"
@@ -52,6 +52,7 @@ const emits = defineEmits<Emits>();
   max-height: 100px;
   object-position: center;
   object-fit: contain;
+  cursor: pointer;
 }
 
 .d-popup__header {

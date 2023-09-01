@@ -22,14 +22,30 @@ const sliderHeight =  computed(() => {
       return '710px';
   }
 });
+
+const swiperAboutRef = ref();
+const swiperAboutThumbsRef = ref();
+
+const activeIndex = ref(0);
+
+function onSlideChange(index: any) {
+  const realIndex = index.target?.swiper?.realIndex;
+  activeIndex.value = Number.isNaN(realIndex) ? 0 : realIndex ?? 0;
+}
+
+function setSlide(index: number) {
+  if (swiperAboutRef.value) {
+    showFullscreen.value = true;
+    swiperAboutRef.value.swiper?.slideTo?.(index);
+  }
+}
 </script>
 
 <template>
   <DPopup
     :logo="company?.logo"
   >
-    <DPopup v-if="showFullscreen" style="background-color: #101111;">
-      <div>21321312312312312312</div>
+    <DPopup v-show="showFullscreen" style="background-color: #101111;">
       <DIcon
         class="d-popup-about__fullscreen_slider_close"
         :style="{ fontSize: useLayoutSize() == 'XS' ? '20px' : '40px', }"
@@ -43,13 +59,17 @@ const sliderHeight =  computed(() => {
         class="d-popup-about__fullscreen_slider"
         :space-between="50"
         :slides-per-view="'auto'"
+        ref="swiperAboutRef"
+        :navigation="true"
+        :pagination="{ dynamicBullets: true }"
+        :mousewheel="{ enabled: true, sensitivity: 1 }"
       >
         <swiper-slide
-          v-for="image in section.images"
+          v-for="(image, index) in section.images"
           :key="image"
           class="d-popup-about__fullscreen_slide"
           :style="{ backgroundImage: `url(${image})` }"
-          @click="showFullscreen = true"
+          @click="setSlide(index)"
           ></swiper-slide>
         </swiper-container>
     </DPopup>
@@ -58,17 +78,19 @@ const sliderHeight =  computed(() => {
       <DText theme="Body-M" class="d-popup-about__text">{{ section?.headerText }}</DText>
       <swiper-container
         v-if="section?.images?.length > 0"
+        ref="swiperAboutThumbsRef"
         class="d-popup-about__slider"
         :pagination="false"
         :space-between="5"
         :slides-per-view="'auto'"
+        @slidechange.self="onSlideChange"
       >
           <swiper-slide
-            v-for="image in section.images"
+            v-for="(image, index) in section.images"
             :key="image"
             class="d-popup-about__slide"
             :style="{ backgroundImage: `url(${image})` }"
-            @click="showFullscreen = true"
+            @click="setSlide(index)"
             ></swiper-slide>
         </swiper-container>
       <DText theme="Body-M" class="d-popup-about__text">{{ section?.bodyText }}</DText>
@@ -102,6 +124,9 @@ const sliderHeight =  computed(() => {
 }
 
 .d-popup-about__fullscreen_slider {
+  --swiper-theme-color: white;
+  --swiper-pagination-bullet-inactive-color: white;
+
   position: absolute;
   top: 0;
   bottom: 0;
@@ -116,6 +141,9 @@ const sliderHeight =  computed(() => {
   background-repeat: no-repeat !important;
   background-size: contain !important;
   background-position: center !important;
+  max-height: 80vh;
+  top: 50%;
+  transform: translate(0, -50%);
 }
 
 .d-popup-about__slider {

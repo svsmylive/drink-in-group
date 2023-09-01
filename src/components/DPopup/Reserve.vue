@@ -73,17 +73,17 @@ async function send() {
       <DText theme="Body-M">Оставьте свои контактные данные и пожелания для бронирования</DText>
       <div class="d-popup-reserve__form">
         <input class="d-popup-reserve__input" v-model="name" placeholder="Ваше имя" required />
-        <input class="d-popup-reserve__input" v-model="phone" placeholder="+7 (" required />
+        <input class="d-popup-reserve__input" v-model="phone" placeholder="+7 (" required v-maska data-maska="+7 ### ###-##-##" />
         <div class="d-popup-reserve__input-block">
-          <input class="d-popup-reserve__input" v-model="date" placeholder="Дата" type="date" />
-          <input class="d-popup-reserve__input" v-model="time" placeholder="Время" />
+          <input class="d-popup-reserve__input" v-model="date" placeholder="Дата" type="date" max="9999-12-31" required />
+          <input class="d-popup-reserve__input" v-model="time" placeholder="Время" required />
         </div>
         <div class="d-popup-reserve__input-block">
-          <input class="d-popup-reserve__input" v-model="count_guests" placeholder="Количество гостей" type="number" />
+          <input class="d-popup-reserve__input" v-model="count_guests" placeholder="Количество гостей" />
           <input class="d-popup-reserve__input" v-model="comment" placeholder="Комментарий" />
         </div>
       </div>
-      <DButton theme="dark" @click="send" type="submit">Отправить</DButton>
+      <DButton theme="dark" type="submit">Отправить</DButton>
     </form>
     <div v-else class="d-popup-reserve">
       <DText theme="Title-S">Ваши данные успешно отправлены</DText>
@@ -98,6 +98,8 @@ async function send() {
   flex-direction: column;
   gap: 15px;
   align-items: center;
+  z-index: 8000;
+  position: relative;
 }
 
 .d-popup-reserve__form {
@@ -115,7 +117,6 @@ async function send() {
   width: 100%;
   display: flex;
   align-items: center;
-  // flex-direction: v-bind(containerDirection);
   gap: 30px;
 }
 
@@ -124,6 +125,7 @@ async function send() {
   padding: 10px 0;
   border: none;
   border-bottom: 1px solid #9B9CA2;
+  background: transparent;
 }
 
 .d-popup-reserve__input:focus{

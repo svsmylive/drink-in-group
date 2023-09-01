@@ -8,8 +8,11 @@ const slideRefs = useTemplateRefsList<HTMLElement>();
 const lastSlide = computed(() => slideRefs.value?.[slideRefs.value?.length - 1]);
 const firstSlide = computed(() => slideRefs.value?.[0]);
 
-const isFirstSlideVisible = useElementVisibility(firstSlide);
-const isLastSlideVisible = useElementVisibility(lastSlide);
+const isUseFirstSlideVisible = useElementVisibility(firstSlide);
+const isUseLastSlideVisible = useElementVisibility(lastSlide);
+
+const isFirstSlideVisible = computed(() => lastSlide.value == undefined ? true : isUseFirstSlideVisible.value);
+const isLastSlideVisible = computed(() => firstSlide.value == undefined ? true : isUseLastSlideVisible.value);
 
 function onSlideChange(index: any) {
   const realIndex = index.target?.swiper?.realIndex;
@@ -30,6 +33,10 @@ function getBottomPadding() {
 }
 
 const swiperThumbsRef = ref();
+
+function slideLeft() {
+  swiperThumbsRef.value?.swiper?.slidePrev();
+}
 
 function slideRight() {
   swiperThumbsRef.value?.swiper?.slideNext();
@@ -74,7 +81,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       filled
       clickable
       class="d-index-page__slider-arrow-left"
-      @click="slideRight"
+      @click="slideLeft"
     />
     <swiper-container
       v-if="isCompaniesExist"

@@ -8,11 +8,11 @@ const emits = defineEmits<Emits>();
 const maxWidth =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
-      return '90%';
+      return '80%';
     case 'S':
-      return '85%';
+      return '700px';
     case 'M':
-      return '793px';
+      return '900px';
     case 'L':
       return '1160px';
   }
@@ -53,14 +53,14 @@ const maxWidth =  computed(() => {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 55555;
+  z-index: 5000;
+  backdrop-filter: blur(10px);
 }
 .d-modal {
   position: fixed;
   text-align: center;
   z-index: 1000;
   background-color: $color-white;
-  // width: 70%;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
