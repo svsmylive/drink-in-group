@@ -66,7 +66,7 @@ const maxWidth =  computed(() => {
   transform: translate(-50%, -50%);
   border-radius: 20px;
   padding: 20px;
-  min-height: 40vh;
+  min-height: 50vh;
   max-height: 90vh;
   width: v-bind(maxWidth);
   max-width: v-bind(maxWidth);

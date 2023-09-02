@@ -11,7 +11,7 @@ interface Emits {
 
 const emits = defineEmits<Emits>();
 
-const isSended = ref(false);
+const status = ref<'success' | 'error' | 'none'>('none');
 
 const name = ref('');
 const phone = ref('');
@@ -38,14 +38,6 @@ const headerText = computed(() => {
   return `${text} ${company.value?.name}`;
 });
 
-const containerDirection = computed(() => {
-  if (useLayoutSize() == 'XS' || useLayoutSize() == 'S') {
-    return 'column';
-  }
-
-  return 'row';
-});
-
 async function send() {
   const body = {
     institution_id: company.value?.id,
@@ -57,18 +49,22 @@ async function send() {
     comment: comment.value,
   };
 
-  await $fetch(formatApi('/feedbacks'), {
+  try {
+    await $fetch(formatApi('/feedbacks'), {
       method: 'POST',
       body: body,
-  });
+    });
 
-  isSended.value = true;
+    status.value = 'success';
+  } catch(error) {
+    status.value = 'error';
+  }
 }
 </script>
 
 <template>
   <DModal @close="emits('close')">
-    <form v-if="!isSended" @submit.prevent="send" class="d-popup-reserve">
+    <form v-if="status == 'none'" @submit.prevent="send" class="d-popup-reserve">
       <DText theme="Title-S">{{ headerText }}</DText>
       <DText theme="Body-M">Оставьте свои контактные данные и пожелания для бронирования</DText>
       <div class="d-popup-reserve__form">
@@ -85,9 +81,14 @@ async function send() {
       </div>
       <DButton theme="dark" type="submit">Отправить</DButton>
     </form>
-    <div v-else class="d-popup-reserve">
-      <DText theme="Title-S">Ваши данные успешно отправлены</DText>
+    <div v-if="status == 'success'" class="d-popup-reserve d-popup-reserve_success">
+      <DText theme="Title-S" class="d-popup-reserve__title">Ваши данные успешно отправлены</DText>
       <DText theme="Body-M">В ближайшее время с вами свяжется наш администратор для подтверждения бронирования</DText>
+    </div>
+    <div v-if="status == 'error'" class="d-popup-reserve d-popup-reserve_error">
+      <DText theme="Title-S" class="d-popup-reserve__title d-popup-reserve_error-title">Во время бронирования произошла ошибка</DText>
+      <DText theme="Body-M">Попробуйте повторить позднее или свяжитесь с нами по телефону:</DText>
+      <a :href="`tel:${props.company?.phone}`"><DText theme="Body-L-Medium">{{ props.company?.phone }}</DText></a>
     </div>
   </DModal>
 </template>
@@ -100,6 +101,24 @@ async function send() {
   align-items: center;
   z-index: 8000;
   position: relative;
+  padding: 0 30px 10px 30px;
+}
+
+.d-popup-reserve__title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.d-popup-reserve_success {
+  gap: 30px;
+}
+
+.d-popup-reserve_error {
+  gap: 30px;
+}
+
+.d-popup-reserve_error .d-popup-reserve_error-title {
+  color: $color-accent !important;
 }
 
 .d-popup-reserve__form {

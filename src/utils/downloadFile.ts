@@ -5,6 +5,7 @@ export function downloadFile(url?: string, title?: string) {
 
   const link = document.createElement("a");
   link.setAttribute('download', title ?? 'download');
+  link.setAttribute('target', '_blank');
   link.href = url;
   document.body.appendChild(link);
 
