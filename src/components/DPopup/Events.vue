@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
+
 interface Props {
   company: any;
 }
@@ -26,6 +30,11 @@ const containerDirection = computed(() => {
 
   return 'row';
 });
+
+function isNew(date: string, time: string) {
+  const parsedDate = dayjs(`${date} ${time}`, "DD-MM-YYYY HH:mm");
+  return parsedDate.isValid() && parsedDate.isAfter(dayjs());
+}
 </script>
 
 <template>
@@ -46,6 +55,7 @@ const containerDirection = computed(() => {
             <div class="d-popup-events__event-time">
               <div class="d-border">{{ event?.date }}</div>
               <div class="d-border">{{ event?.time }}</div>
+              <div v-if="isNew(event?.date, event?.time)" class="d-border d-border__new-label">NEW</div>
             </div><br>
             <DText theme="Title-XS">{{ event?.title }}</DText><br>
             <DText theme="Body-S">{{ event?.content }}</DText><br><br>
@@ -135,5 +145,11 @@ const containerDirection = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.d-border.d-border__new-label {
+  color: $color-accent;
+  border-color: $color-accent;
+  margin-left: auto;
 }
 </style>

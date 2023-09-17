@@ -80,7 +80,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       icon="arrow"
       filled
       clickable
-      class="d-index-page__slider-arrow-left"
+      class="d-index-page__slider-arrow d-index-page__slider-arrow_left"
       @click="slideLeft"
     />
     <swiper-container
@@ -110,7 +110,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       icon="arrow"
       filled
       clickable
-      class="d-index-page__slider-arrow-right"
+      class="d-index-page__slider-arrow d-index-page__slider-arrow_right"
       @click="slideRight"
     />
   </ClientOnly>
@@ -141,23 +141,20 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
   width: fit-content;
 }
 
-.d-index-page__slider-arrow-right {
+.d-index-page__slider-arrow {
   position: absolute;
-  right: 5px;
   bottom: 20px;
   z-index: 1000;
   line-height: 50px;
   font-size: 50px;
   opacity: 0.6;
+  padding: 10px;
 }
-.d-index-page__slider-arrow-left {
-  position: absolute;
+.d-index-page__slider-arrow_right {
+  right: 5px;
+}
+.d-index-page__slider-arrow_left {
   left: 5px;
-  bottom: 20px;
-  z-index: 1000;
-  line-height: 50px;
-  font-size: 50px;
-  opacity: 0.6;
   transform: rotate(180deg);
 }
 </style>

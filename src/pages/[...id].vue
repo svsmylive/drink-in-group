@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useImage } from '@vueuse/core';
+import { useImage, useScrollLock } from '@vueuse/core';
 import { register } from 'swiper/element/bundle';
 register();
 
@@ -51,9 +51,20 @@ function action(section?: any) {
   }
 }
 
+const el = ref<HTMLElement>();
+const isLocked = useScrollLock(el);
+
+onMounted(() => {
+  el.value = document.body;
+})
+
+watch(currentSection, () => {
+  isLocked.value = currentSection.value != 'none';
+})
+
 const currentImage = ref();
 const backgroundImage = computed(() => {
-  const image = currentImage.value ?? currentCompany.value?.slider[0];
+  const image = currentImage.value ?? currentCompany.value?.slider?.[0];
   return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
 });
 
@@ -75,12 +86,12 @@ function updateCurrentImage(image?: string) {
 const containerPadding =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
-      return '40px';
+      return '80px 40px 40px 40px';
     case 'S':
-      return '50px';
+      return '120px 50px 50px 50px';
     case 'L':
     case 'M':
-      return '120px';
+      return '140px 100px 100px 120px';
   }
 });
 
@@ -180,7 +191,7 @@ const textAlign = computed(() => {
     @close="currentSection = 'none'"
   />
 
-  <DBannerLogo />
+  <DBannerLogo :subtitle="currentCompany?.name" />
 
   <div
     class="d-company"

@@ -1,16 +1,28 @@
 import axios from 'axios';
-// https://nuxt.com/docs/api/configuration/nuxt-config
+
+const urlBase = 'https://drink-in-group.ru';
+const apiBase = `${urlBase}/api`;
+
 export default defineNuxtConfig({
   ssr: true,
   runtimeConfig: {
     public: {
-      urlBase: 'https://drink-in-group.ru',
-      apiBase: 'https://drink-in-group.ru/api',
+      urlBase,
+      apiBase,
+    }
+  },
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        lang: 'ru'
+      }
     }
   },
   hooks: {
     async 'nitro:config'(nitroConfig) {
-      const response = await axios.get('https://drink-in-group.ru/api/institutions');
+      const response = await axios.get(`${apiBase}/institutions`);
       const slugs = response?.data?.data.filter((item) => item?.url != undefined).map((item) => `/${item?.url}`);
       nitroConfig.prerender?.routes?.push(...slugs);
     },
@@ -46,5 +58,5 @@ export default defineNuxtConfig({
       }
     }
   },
-  // devtools: { enabled: true }
+  devtools: { enabled: true }
 })

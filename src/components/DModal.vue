@@ -51,7 +51,7 @@ const maxWidth =  computed(() => {
 .d-modal-wrapper {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 5000;
   backdrop-filter: blur(10px);

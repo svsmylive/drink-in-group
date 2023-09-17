@@ -66,7 +66,8 @@ async function send() {
   <DModal @close="emits('close')">
     <form v-if="status == 'none'" @submit.prevent="send" class="d-popup-reserve">
       <DText theme="Title-S">{{ headerText }}</DText>
-      <DText theme="Body-M">Оставьте свои контактные данные и пожелания для бронирования</DText>
+      <DText theme="Body-M">Оставьте свои контактные данные и пожелания для бронирования.</DText>
+      <DText theme="Body-S">После отправки заявки с вами свяжутся в течение часа.</DText>
       <div class="d-popup-reserve__form">
         <input class="d-popup-reserve__input" v-model="name" placeholder="Ваше имя" required />
         <input class="d-popup-reserve__input" v-model="phone" placeholder="+7 (" required v-maska data-maska="+7 ### ###-##-##" />
@@ -84,6 +85,10 @@ async function send() {
     <div v-if="status == 'success'" class="d-popup-reserve d-popup-reserve_success">
       <DText theme="Title-S" class="d-popup-reserve__title">Ваши данные успешно отправлены</DText>
       <DText theme="Body-M">В ближайшее время с вами свяжется наш администратор для подтверждения бронирования</DText>
+      <DText theme="Body-XS">Если вам не перезвонили, значит произошел технический сбой.</DText>
+      <DText theme="Body-XS">Просьба связаться с нами по номеру: <a :href="`tel:${props.company?.phone}`">
+        <DText theme="Body-XS">{{ props.company?.phone }}</DText></a>
+      </DText>
     </div>
     <div v-if="status == 'error'" class="d-popup-reserve d-popup-reserve_error">
       <DText theme="Title-S" class="d-popup-reserve__title d-popup-reserve_error-title">Во время бронирования произошла ошибка</DText>
@@ -101,7 +106,7 @@ async function send() {
   align-items: center;
   z-index: 8000;
   position: relative;
-  padding: 0 30px 10px 30px;
+  padding: 0 30px 30px 30px;
 }
 
 .d-popup-reserve__title {
@@ -109,12 +114,12 @@ async function send() {
   margin-bottom: 40px;
 }
 
-.d-popup-reserve_success {
+.d-popup-reserve_error {
   gap: 30px;
 }
 
-.d-popup-reserve_error {
-  gap: 30px;
+.d-popup-reserve_success {
+  gap: 10px;
 }
 
 .d-popup-reserve_error .d-popup-reserve_error-title {
