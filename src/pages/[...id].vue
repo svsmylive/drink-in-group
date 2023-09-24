@@ -86,12 +86,12 @@ function updateCurrentImage(image?: string) {
 const containerPadding =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
-      return '80px 40px 40px 40px';
+      return '90px 20px 10px';
     case 'S':
-      return '120px 50px 50px 50px';
+      return '110px 30px 10px';
     case 'L':
     case 'M':
-      return '140px 100px 100px 120px';
+      return '160px 40px 10px';
   }
 });
 
@@ -234,7 +234,6 @@ const textAlign = computed(() => {
 .d-company {
   display: flex;
   padding: v-bind(containerPadding);
-  padding-bottom: 5px;
   text-align: v-bind(textAlign);
   min-height: 100vh;
   align-items: flex-start;

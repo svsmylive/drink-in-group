@@ -20,6 +20,25 @@ const time = ref('');
 const count_guests = ref('');
 const comment = ref('');
 
+const dateInputRef = ref<HTMLInputElement>();
+
+function onDateInputFocus(event: MouseEvent) {
+  if (dateInputRef.value != undefined) {
+    dateInputRef.value.type = 'date';
+    nextTick(() => {
+        event.target?.showPicker();
+        dateInputRef.value?.showPicker();
+      }
+    );
+  }
+}
+
+function onDateInputBlur() {
+  if (dateInputRef.value != undefined && date.value?.length == 0) {
+    dateInputRef.value.type = 'text';
+  }
+}
+
 const company = computed(() => props.company);
 
 const headerText = computed(() => {
@@ -72,7 +91,18 @@ async function send() {
         <input class="d-popup-reserve__input" v-model="name" placeholder="Ваше имя" required />
         <input class="d-popup-reserve__input" v-model="phone" placeholder="+7 (" required v-maska data-maska="+7 ### ###-##-##" />
         <div class="d-popup-reserve__input-block">
-          <input class="d-popup-reserve__input" v-model="date" placeholder="Дата" type="date" max="9999-12-31" required />
+          <input
+            v-model="date"
+            ref="dateInputRef"
+            class="d-popup-reserve__input d-popup-reserve__input-date"
+            :class="{ 'd-popup-reserve__input-date_has-value': date?.length > 0 }"
+            placeholder="Дата"
+            type="text"
+            max="9999-12-31"
+            required
+            @click="onDateInputFocus"
+            @blur="onDateInputBlur"
+          />
           <input class="d-popup-reserve__input" v-model="time" placeholder="Время" required />
         </div>
         <div class="d-popup-reserve__input-block">
@@ -146,17 +176,24 @@ async function send() {
 
 .d-popup-reserve__input {
   width: 100%;
+  min-height: 40px;
+  box-sizing: border-box;
   padding: 10px 0;
   border: none;
-  border-bottom: 1px solid #9B9CA2;
+  border-bottom: 1px solid $color-grey-primary;
   background: transparent;
 }
 
 .d-popup-reserve__input:focus{
-    outline: none;
+  outline: none;
 }
 
 .d-popup-reserve__input::placeholder {
-  color: #9B9CA2;
+  color: $color-grey-primary;
+}
+
+.d-popup-reserve__input-date:not(:focus):not(.d-popup-reserve__input-date_has-value):before{
+  color: $color-grey-primary;
+  content: attr(placeholder);
 }
 </style>
