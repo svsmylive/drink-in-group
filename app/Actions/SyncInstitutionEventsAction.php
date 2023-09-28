@@ -14,6 +14,10 @@ class SyncInstitutionEventsAction
             $event->save();
         });
 
+        if (!$events) {
+            return;
+        }
+
         Event::query()->whereIn('id', $events)->each(function (Event $event) use ($institution) {
             $event->institution()->associate($institution);
             $event->save();
