@@ -24,7 +24,14 @@ class SendTelegramNotification implements ShouldQueue
     {
         $message = $this->getMessage($event->feedback);
         $apiKey = config('telegram.api_key');
-        $chatId = config('telegram.chat_id');
+
+        if ($event->feedback->institution->city == 'Краснодар') {
+            $chatId = config('telegram.chat_id_krasnodar');
+        } elseif ($event->feedback->institution->city == 'Анапа') {
+            $chatId = config('telegram.chat_id_anapa');
+        } else {
+            $chatId = config('telegram.chat_id_sochi');
+        }
 
         Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
             'chat_id' => $chatId,
