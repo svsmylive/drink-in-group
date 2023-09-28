@@ -7,7 +7,7 @@ use App\Models\Institution;
 
 class SyncInstitutionEventsAction
 {
-    public function execute(Institution $institution, array $events): void
+    public function execute(Institution $institution, array|null $events): void
     {
         $institution->events()->each(function (Event $event) {
             $event->institution()->disassociate();

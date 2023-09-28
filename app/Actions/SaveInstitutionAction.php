@@ -26,9 +26,7 @@ class SaveInstitutionAction
             $institution->attachment()->sync($attachment);
         }
 
-        if ($eventData) {
-            $this->syncInstitutionEventsAction->execute($institution, $eventData);
-        }
+        $this->syncInstitutionEventsAction->execute($institution, $eventData);
 
         $institution->save();
     }

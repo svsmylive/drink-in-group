@@ -11,13 +11,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('institutions', function (Blueprint $table) {
-            $table->string('about_detail_text_header', 500)->nullable()->change();
-            $table->string('about_detail_text_body', 500)->nullable()->change();
-            $table->string('about_detail_text_footer', 500)->nullable()->change();
-            $table->string('event_text_footer', 500)->nullable()->change();
-            $table->string('event_text_header', 500)->nullable()->change();
-            $table->string('services_and_prices_text_header', 500)->nullable()->change();
-            $table->string('services_and_prices_text_footer', 500)->nullable()->change();
+            $table->string('about_detail_text_header', 1000)->nullable()->change();
+            $table->string('about_detail_text_body', 1000)->nullable()->change();
+            $table->string('about_detail_text_footer', 1000)->nullable()->change();
+            $table->string('event_text_footer', 1000)->nullable()->change();
+            $table->string('event_text_header', 1000)->nullable()->change();
+            $table->string('services_and_prices_text_header', 1000)->nullable()->change();
+            $table->string('services_and_prices_text_footer', 1000)->nullable()->change();
         });
     }
 
