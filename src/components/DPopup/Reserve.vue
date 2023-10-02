@@ -45,7 +45,7 @@ const headerText = computed(() => {
   let text = 'Забронировать';
   switch(company.value?.type) {
     case 'Ресторан':
-      text += ' столик в ресторане '
+      text += ' стол в ресторане '
       break;
     case 'Сауна':
       text += ' сауну '

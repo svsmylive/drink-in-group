@@ -81,22 +81,23 @@ function setSlide(index: number) {
         ref="swiperAboutThumbsRef"
         class="d-popup-about__slider"
         :pagination="false"
+        :navigation="true"
         :space-between="5"
         :slides-per-view="'auto'"
         @slidechange.self="onSlideChange"
       >
-          <swiper-slide
-            v-for="(image, index) in section.images"
-            :key="image"
-            class="d-popup-about__slide"
-            :style="{ backgroundImage: `url(${image})` }"
-            @click="setSlide(index)"
-            ></swiper-slide>
-        </swiper-container>
+        <swiper-slide
+          v-for="(image, index) in section.images"
+          :key="image"
+          class="d-popup-about__slide"
+          :style="{ backgroundImage: `url(${image})` }"
+          @click="setSlide(index)"
+          ></swiper-slide>
+      </swiper-container>
       <DText theme="Body-M" class="d-popup-about__text">{{ section?.bodyText }}</DText>
       <DText theme="Body-L-Regular" class="d-popup-about__text">{{ section?.footerText }}</DText>
       <div class="d-popup-about__reserve">
-        <DText theme="Body-S" class="d-popup-about__text">ЗАБРОНИРОВАТЬ СТОЛИК:</DText>
+        <DText theme="Body-S" class="d-popup-about__text">ЗАБРОНИРОВАТЬ СТОЛ:</DText>
         <a :href="`tel:${company?.phone}`"><DText theme="Number">{{ company?.phone }}</DText></a>
       </div>
     </div>
@@ -147,6 +148,8 @@ function setSlide(index: number) {
 }
 
 .d-popup-about__slider {
+  --swiper-theme-color: white;
+  --swiper-pagination-bullet-inactive-color: white;
   height: v-bind(sliderHeight);
   width: 100%
 }
@@ -160,7 +163,7 @@ function setSlide(index: number) {
   background-position: center !important;
 }
 
-d-popup-about__slide:hover {
+.d-popup-about__slide:hover {
   cursor: pointer;
 }
 

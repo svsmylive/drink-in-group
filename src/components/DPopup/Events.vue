@@ -64,7 +64,7 @@ function isNew(date: string, time: string) {
       </div>
       <DText theme="Body-L-Regular" class="d-popup-events__text">{{ section?.footerText }}</DText>
       <div class="d-popup-events__reserve">
-        <DText theme="Body-S">ЗАБРОНИРОВАТЬ СТОЛИК:</DText>
+        <DText theme="Body-S">ЗАБРОНИРОВАТЬ СТОЛ:</DText>
         <a :href="`tel:${company?.phone}`"><DText theme="Number">{{ company?.phone }}</DText></a>
       </div>
     </div>
