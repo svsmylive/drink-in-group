@@ -43,6 +43,16 @@ export default defineNuxtConfig({
         download: true,
       }
     ],
+    [
+      'yandex-metrika-module-nuxt3',
+      {
+        id: '95293684',
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      }
+    ]
   ],
   vue: {
     compilerOptions: {

@@ -2,6 +2,7 @@
 </script>
 
 <template>
+  <div><img src="https://mc.yandex.ru/watch/95293684" style="position:absolute; left:-9999px;" alt="" /></div>
   <NuxtPage />
 </template>
 
