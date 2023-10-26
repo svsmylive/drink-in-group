@@ -2,7 +2,12 @@
 import { register } from 'swiper/element/bundle';
 register();
 
+const route = useRoute();
+const hashId = computed(() => route.hash.slice(1));
+
 const activeIndex = ref(0);
+const initialSlide = ref(0);
+
 const slideRefs = useTemplateRefsList<HTMLElement>();
 
 const lastSlide = computed(() => slideRefs.value?.[slideRefs.value?.length - 1]);
@@ -16,7 +21,7 @@ const isLastSlideVisible = computed(() => firstSlide.value == undefined ? true :
 
 function onSlideChange(index: any) {
   const realIndex = index.target?.swiper?.realIndex;
-  activeIndex.value = Number.isNaN(realIndex) ? 0 : realIndex ?? 0;
+  activeIndex.value = Number.isNaN(realIndex) ? initialSlide.value : realIndex ?? initialSlide.value;
 }
 
 function getBottomPadding() {
@@ -48,6 +53,18 @@ const isCompaniesExist = computed(() => companies.value.length > 0);
 
 const { data } = await useFetch(formatApi('/institutions/main/page'));
 
+watch(companies, () => {
+  const index = companies.value.findIndex((item) => {
+    const url = item.seoUrl.endsWith('/') ? item.seoUrl.slice(0, -1) : item.seoUrl;
+    return url === hashId.value;
+  });
+
+  if (index != -1) {
+    initialSlide.value = index;
+    activeIndex.value = index;
+  }
+})
+
 const seoTitle = computed(() => data.value?.data?.title ?? '');
 const seoDescription = computed(() => data.value?.data?.description ?? '');
 </script>
@@ -66,6 +83,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       thumbs-swiper="#d-swiper-thumbs"
       :resistance="true"
       :resistanceRatio="0"
+      :initialSlide="initialSlide"
       @slidechange.self="onSlideChange"
       slides-per-view="1"
     >
@@ -89,6 +107,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       id="d-swiper-thumbs"
       slides-per-view="auto"
       :free-mode="true"
+      :initialSlide="initialSlide"
       :mousewheel="{ enabled: true, sensitivity: 1 }"
       :style="{ paddingBottom: getBottomPadding() }"
       class="d-index-page__slider-thumbs"
