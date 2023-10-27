@@ -54,6 +54,10 @@ const isCompaniesExist = computed(() => companies.value.length > 0);
 const { data } = await useFetch(formatApi('/institutions/main/page'));
 
 watch(companies, () => {
+  if (companies.value.length == 0) {
+    return;
+  }
+
   const index = companies.value.findIndex((item) => {
     const url = item.seoUrl.endsWith('/') ? item.seoUrl.slice(0, -1) : item.seoUrl;
     return url === hashId.value;
@@ -63,7 +67,7 @@ watch(companies, () => {
     initialSlide.value = index;
     activeIndex.value = index;
   }
-})
+}, { immediate: true })
 
 const seoTitle = computed(() => data.value?.data?.title ?? '');
 const seoDescription = computed(() => data.value?.data?.description ?? '');
