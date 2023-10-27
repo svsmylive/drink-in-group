@@ -1,5 +1,6 @@
 function getSections(data: any) {
   const sections = [];
+  const { formatUrl } = useFormatUrl();
 
   if (data?.menu != undefined) {
     sections.push({
@@ -63,6 +64,7 @@ function getSections(data: any) {
 
 function getSlider(data: any) {
   const layoutSize = useLayoutSize();
+  const { formatUrl } = useFormatUrl();
 
   if ((layoutSize == 'XS' || layoutSize == 'S') && data?.slider_images_mobile?.length > 0) {
     return data?.slider_images_mobile.map((image: any) => formatUrl(image?.url)) ?? [];
@@ -75,6 +77,8 @@ export function formatCompanies(data: any) {
   if (data == undefined || !Array.isArray(data) || data.length === 0) {
     return [];
   }
+
+  const { formatUrl } = useFormatUrl();
 
   return data.map((item) => ({
     id: item?.id ?? 0,

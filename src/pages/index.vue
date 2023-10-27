@@ -54,7 +54,7 @@ const isCompaniesExist = computed(() => companies.value.length > 0);
 const { data } = await useFetch(formatApi('/institutions/main/page'));
 
 watch(companies, () => {
-  if (companies.value.length == 0) {
+  if (process.server || companies.value.length == 0) {
     return;
   }
 
