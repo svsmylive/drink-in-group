@@ -10,7 +10,7 @@ const xs = breakpoints.smaller('xs');
 const s = breakpoints.between('xs', 's');
 const m = breakpoints.between('s', 'm');
 
-export function useLayoutSize(): LayoutSize {
+export const useLayoutSize = (): LayoutSize => {
   if (xs.value) {
     return 'XS';
   }

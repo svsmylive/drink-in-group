@@ -1,6 +1,6 @@
 const backgroundImage = ref('public/images/bgbanner.webp');
 
-export function useBackgroundImage() {
+export const useBackgroundImage = () => {
   function getImage() {
     return backgroundImage.value;
   }

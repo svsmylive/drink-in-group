@@ -51,7 +51,12 @@ const { companies } = useCompanies();
 
 const isCompaniesExist = computed(() => companies.value.length > 0);
 
-const { data } = await useFetch(formatApi('/institutions/main/page'));
+const { data } = await useFetch<{
+  data: {
+    title: string;
+    description: string;
+  }
+}>(formatApi('/institutions/main/page'));
 
 watch(companies, () => {
   if (process.server || companies.value.length == 0) {
@@ -67,6 +72,8 @@ watch(companies, () => {
     initialSlide.value = index;
     activeIndex.value = index;
   }
+
+  setTimeout(() => swiperThumbsRef.value?.swiper?.update(), 500)
 }, { immediate: true })
 
 const seoTitle = computed(() => data.value?.data?.title ?? '');
@@ -112,6 +119,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
       slides-per-view="auto"
       :free-mode="true"
       :initialSlide="initialSlide"
+      :observer="true"
       :mousewheel="{ enabled: true, sensitivity: 1 }"
       :style="{ paddingBottom: getBottomPadding() }"
       class="d-index-page__slider-thumbs"
@@ -156,6 +164,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
   bottom: 0;
   display: flex;
   flex-wrap: nowrap;
+  width: 100%;
   max-width: 100%;
   overflow: hidden;
   background: linear-gradient(0deg, #0A0A0A 0%, rgba(10, 10, 10, 0.00) 100%);

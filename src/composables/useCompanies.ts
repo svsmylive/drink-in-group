@@ -1,7 +1,9 @@
-const companiesData = ref();
-const companies = computed(() => formatCompanies(companiesData.value?.value?.data) ?? []);
+export const useCompanies = () => {
+  const companiesData = ref();
 
-export function useCompanies() {
+  const { formatCompanies } = useFormatCompanies();
+  const companies = computed(() => formatCompanies(companiesData.value?.value?.data) ?? []);
+
   async function update() {
     if (companies.value.length > 0) {
       return;
