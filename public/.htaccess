@@ -5,17 +5,37 @@
 
     RewriteEngine On
 
+    RewriteRule ^вино-и-море$ /vino-i-more/ [R=301,L]
+    RewriteRule ^красная-поляна/белый-гриб$ /krasnaya-polyana/beliy-grib/ [R=301,L]
+    RewriteRule ^камелот$ /kamelot/ [R=301,L]
+    RewriteRule ^белый-гриб$ /beliy-grib/ [R=301,L]
+    RewriteRule ^голос$ /golos/ [R=301,L]
+    RewriteRule ^римские-каникулы$ /rimskie-kanikuly/ [R=301,L]
+
+    RewriteRule ^вино-и-море/$ /vino-i-more/ [R=301,L]
+    RewriteRule ^красная-поляна/белый-гриб/$ /krasnaya-polyana/beliy-grib/ [R=301,L]
+    RewriteRule ^камелот/$ /kamelot/ [R=301,L]
+    RewriteRule ^белый-гриб/$ /beliy-grib/ [R=301,L]
+    RewriteRule ^голос/$ /golos/ [R=301,L]
+    RewriteRule ^римские-каникулы/$ /rimskie-kanikuly/ [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*[^/])$ /$1/ [L,R]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+
+PassengerNodejs /home/v/vladim0u/drink-in-group.ru/.local/node-v16.17.0-linux-x64/bin/node
+#PassengerNodejs /home/v/vladim0u/.local/bin/node
+PassengerAppRoot /home/v/vladim0u/drink-in-group.ru/src/.output/server/
+PassengerAppType node
+#PassengerStartupFile index.mjs
+PassengerStartupFile startup.cjs
