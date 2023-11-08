@@ -19,8 +19,8 @@
     RewriteRule ^голос/$ /golos/ [R=301,L]
     RewriteRule ^римские-каникулы/$ /rimskie-kanikuly/ [R=301,L]
 
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*[^/])$ /$1/ [L,R]
+#    RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteRule ^(.*[^/])$ /$1/ [L,R]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
