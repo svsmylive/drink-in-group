@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   },
   hooks: {
     async 'nitro:config'(nitroConfig) {
-      const response = await axios.get(`${apiBase}/institutions`);
+      const response = await axios.get(`${apiBase}/institutions/`);
       const slugs = response?.data?.data.filter((item) => item?.url != undefined).map((item) => `/${item?.url}`);
       nitroConfig.prerender?.routes?.push(...slugs);
     },

@@ -56,7 +56,7 @@ const { data } = await useFetch<{
     title: string;
     description: string;
   }
-}>(formatApi('/institutions/main/page'));
+}>(formatApi('/institutions/main/page/'));
 
 watch(companies, () => {
   if (process.server || companies.value.length == 0) {

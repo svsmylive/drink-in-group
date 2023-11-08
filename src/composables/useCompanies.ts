@@ -9,7 +9,7 @@ export const useCompanies = () => {
       return;
     }
 
-    const { data } = await useFetch(formatApi('/institutions'));
+    const { data } = await useFetch(formatApi('/institutions/'));
     companiesData.value = data;
   }
 

@@ -69,7 +69,7 @@ async function send() {
   };
 
   try {
-    await $fetch(formatApi('/feedbacks'), {
+    await $fetch(formatApi('/feedbacks/'), {
       method: 'POST',
       body: body,
     });
