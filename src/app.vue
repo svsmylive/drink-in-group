@@ -3,7 +3,9 @@
 
 <template>
   <div><img src="https://mc.yandex.ru/watch/95293684" style="position:absolute; left:-9999px;" alt="" /></div>
-  <NuxtPage />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <style>
@@ -28,5 +30,16 @@ body {
 a, a:visited {
   color: white;
   text-decoration: none;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  /* opacity: 0; */
+  background-color: black;
+  filter: blur(1rem);
 }
 </style>

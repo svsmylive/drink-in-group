@@ -1,55 +1,31 @@
 <script setup lang="ts">
-import { register } from 'swiper/element/bundle';
-register();
-
-const route = useRoute();
-const hashId = computed(() => route.hash.slice(1));
-
-const activeIndex = ref(0);
-const initialSlide = ref(0);
-
-const slideRefs = useTemplateRefsList<HTMLElement>();
-
-const lastSlide = computed(() => slideRefs.value?.[slideRefs.value?.length - 1]);
-const firstSlide = computed(() => slideRefs.value?.[0]);
-
-const isUseFirstSlideVisible = useElementVisibility(firstSlide);
-const isUseLastSlideVisible = useElementVisibility(lastSlide);
-
-const isFirstSlideVisible = computed(() => lastSlide.value == undefined ? true : isUseFirstSlideVisible.value);
-const isLastSlideVisible = computed(() => firstSlide.value == undefined ? true : isUseLastSlideVisible.value);
-
-function onSlideChange(index: any) {
-  const realIndex = index.target?.swiper?.realIndex;
-  activeIndex.value = Number.isNaN(realIndex) ? initialSlide.value : realIndex ?? initialSlide.value;
-}
-
-function getBottomPadding() {
-  switch (useLayoutSize()) {
-    case 'XS':
-      return '10px';
-    case 'S':
-      return '20px';
-    case 'M':
-      return '30px';
-    case 'L':
-      return '40px';
-  }
-}
-
-const swiperThumbsRef = ref();
-
-function slideLeft() {
-  swiperThumbsRef.value?.swiper?.slidePrev();
-}
-
-function slideRight() {
-  swiperThumbsRef.value?.swiper?.slideNext();
-}
-
 const { companies } = useCompanies();
 
-const isCompaniesExist = computed(() => companies.value.length > 0);
+const isMobile = computed(() => useLayoutSize() == 'XS' || useLayoutSize() == 'S');
+
+const currentBackground = ref();
+
+const backgroundImage = computed(() => {
+  const image = currentBackground.value ?? companies.value?.[0]?.slider?.[0];
+
+  if (image != undefined) {
+    return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
+  }
+});
+
+async function updateBackground(company?: any) {
+  const image = company?.slider?.[0];
+
+  if (image == undefined || currentBackground.value == image) {
+    return;
+  }
+
+  const img = new Image();
+  img.src = image;
+  await img.decode();
+
+  currentBackground.value = image;
+}
 
 const { data } = await useFetch<{
   data: {
@@ -58,135 +34,111 @@ const { data } = await useFetch<{
   }
 }>(formatApi('/institutions/main/page/'));
 
-watch(companies, () => {
-  if (process.server || companies.value.length == 0) {
-    return;
-  }
-
-  const index = companies.value.findIndex((item) => {
-    const url = item.seoUrl.endsWith('/') ? item.seoUrl.slice(0, -1) : item.seoUrl;
-    return url === hashId.value;
-  });
-
-  if (index != -1) {
-    initialSlide.value = index;
-    activeIndex.value = index;
-  }
-
-  setTimeout(() => swiperThumbsRef.value?.swiper?.update(), 500)
-}, { immediate: true })
-
-const seoTitle = computed(() => data.value?.data?.title ?? '');
+const seoTitle = computed(() => data.value?.data?.title ?? 'Сеть ресторанов DRINK IN GROUP');
 const seoDescription = computed(() => data.value?.data?.description ?? '');
 </script>
 
 <template>
+<div
+  class="index-page"
+  :style="{
+    backgroundImage: backgroundImage,
+    backgroundColor: 'blueviolet',
+  }"
+>
   <Head>
     <Title>{{ seoTitle }}</Title>
     <Meta name="description" :content="seoDescription" />
   </Head>
-
   <ClientOnly>
-    <swiper-container
-      v-if="isCompaniesExist"
-      id="d-index-page__slider"
-      class="d-index-page__slider"
-      thumbs-swiper="#d-swiper-thumbs"
-      :resistance="true"
-      :resistanceRatio="0"
-      :initialSlide="initialSlide"
-      @slidechange.self="onSlideChange"
-      slides-per-view="1"
-    >
-      <swiper-slide v-for="company in companies" :key="company.id" >
-        <DBannerTitle :company="company" />
-        <DSlider :images="company.slider" />
-      </swiper-slide>
-    </swiper-container>
-
-    <DIcon
-      v-if="!isFirstSlideVisible"
-      icon="arrow"
-      filled
-      clickable
-      class="d-index-page__slider-arrow d-index-page__slider-arrow_left"
-      @click="slideLeft"
-    />
-    <swiper-container
-      v-if="isCompaniesExist"
-      ref="swiperThumbsRef"
-      id="d-swiper-thumbs"
-      slides-per-view="auto"
-      :free-mode="true"
-      :initialSlide="initialSlide"
-      :observer="true"
-      :mousewheel="{ enabled: true, sensitivity: 1 }"
-      :style="{ paddingBottom: getBottomPadding() }"
-      class="d-index-page__slider-thumbs"
-    >
-      <swiper-slide
-        v-for="(company, index) in companies"
+  <div class="index-page__content" :class="{ 'index-page__content_mobile': isMobile }">
+    <div class="index-page__menu" :class="{ 'index-page__menu_mobile': isMobile }">
+      <div
+        v-for="company in companies"
         :key="company.id"
-        ref="slideRefs"
-        class="d-swiper-slide"
+        class="index-page__menu-item"
+        @mouseover="updateBackground(company)"
       >
-        <DBannerMenu
-          :active="index === activeIndex"
-          :company="company"
-        />
-      </swiper-slide>
-    </swiper-container>
-    <DIcon
-      v-if="!isLastSlideVisible"
-      icon="arrow"
-      filled
-      clickable
-      class="d-index-page__slider-arrow d-index-page__slider-arrow_right"
-      @click="slideRight"
-    />
+        <NuxtLink :to="company?.seoUrl">
+          <DBannerMenu
+            :company="company"
+          />
+        </NuxtLink>
+      </div>
+    </div>
+    <div class="index-page__logo" :class="{ 'index-page__logo_mobile': isMobile }">
+      <DIcon icon="drinkInGroupLogo" :filled="false" />
+    </div>
+  </div>
   </ClientOnly>
-  <DBannerLogo />
+</div>
 </template>
 
-<style scoped lang="scss">
-.d-index-page {
-  flex-grow: 1;
-}
-.d-index-page__slider {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-
-.d-index-page__slider-thumbs {
-  position: absolute;
-  bottom: 0;
+<style lang="scss">
+.index-page {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  background: linear-gradient(0deg, #0A0A0A 0%, rgba(10, 10, 10, 0.00) 100%);
-}
-.d-swiper-slide {
-  width: fit-content;
+  align-items: center;
+  padding: 0 40px;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
-.d-index-page__slider-arrow {
-  position: absolute;
-  bottom: 20px;
-  z-index: 1000;
-  line-height: 50px;
-  font-size: 50px;
-  opacity: 0.6;
-  padding: 10px;
+.index-page__content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
-.d-index-page__slider-arrow_right {
-  right: 5px;
+
+.index-page__content_mobile {
+  flex-direction: column-reverse;
 }
-.d-index-page__slider-arrow_left {
-  left: 5px;
-  transform: rotate(180deg);
+
+.index-page__menu {
+  flex: 0 1 700px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.index-page__menu_mobile {
+  max-height: none;
+  overflow: visible;
+}
+
+.index-page__menu-item:not(:last-child) {
+  border-bottom: 1px solid $color-white;
+}
+
+.index-page__logo {
+  color: $color-white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & .nuxt-icon svg{
+    height: 250px !important;
+    font-size: 450px;
+    margin: 0;
+  }
+}
+
+.index-page__logo_mobile {
+  color: $color-white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & .nuxt-icon svg{
+    height: 150px !important;
+    font-size: 300px;
+    margin: 0;
+  }
 }
 </style>

@@ -1,13 +1,89 @@
 <script setup lang="ts">
-import { useImage, useScrollLock } from '@vueuse/core';
-import { register } from 'swiper/element/bundle';
-register();
+import { useScrollLock } from '@vueuse/core';
+import { usePointerSwipe } from '@vueuse/core';
+
+const target = ref<HTMLElement | null>(null)
+const container = ref<HTMLElement | null>(null)
+
+const containerWidth = computed(() => container.value?.offsetWidth)
+
+const { distanceX } = usePointerSwipe(target, {
+  onSwipeEnd() {
+    if (!containerWidth.value) {
+      return;
+    }
+
+    if (Math.abs(distanceX.value) > containerWidth.value / 10) {
+      if (distanceX.value > 0) goRight();
+      else goLeft();
+    }
+  },
+})
 
 const { companies } = useCompanies();
 
+const router = useRouter()
 const route = useRoute();
 const id = Array.isArray(route.params.id) ? route.params.id.join('/') : route.params.id;
-const currentCompany = computed(() => companies.value.find((c) => c.seoUrl === id || c.name === id));
+
+const currentCompanyIndex = computed(() => companies.value?.findIndex((company: any) => company.seoUrl === id || company.name === id))
+const currentCompany = computed(() => companies.value?.[currentCompanyIndex.value]);
+
+const isActive = computed(() => currentCompany.value?.isActive);
+const isMobile = computed(() => useLayoutSize() == 'XS' || useLayoutSize() == 'S');
+const allowLeft = computed(() => currentCompanyIndex.value > 0);
+const allowRight = computed(() => currentCompanyIndex.value < companies.value?.length - 1);
+
+function goLeft() {
+  if (allowLeft.value) {
+    const route = companies.value?.[currentCompanyIndex.value - 1]?.seoUrl;
+    router.push(`/${route}`);
+  }
+}
+
+function goRight() {
+  if (allowRight.value) {
+    const route = companies.value?.[currentCompanyIndex.value + 1]?.seoUrl;
+    router.push(`/${route}`);
+  }
+}
+
+const timeOfWork = computed(() => {
+  const [header, ...info] = currentCompany.value?.timeOfWork?.split(',');
+  if (info.length == 0) {
+    return [header];
+  }
+
+  return [
+    `${header},`, info?.join(','),
+  ]
+
+});
+const menuCompanies = computed(() => {
+  return companies.value?.filter((company: any) => company.seoUrl != currentCompany.value.seoUrl) ?? [];
+});
+
+const currentBackground = ref();
+
+const backgroundImage = computed(() => {
+  const image = currentBackground.value ?? currentCompany.value.slider?.[0];
+
+  if (image != undefined) {
+    return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
+  }
+});
+
+async function updateBackground(image?: any) {
+  if (image == undefined || currentBackground.value == image) {
+    return;
+  }
+
+  const img = new Image();
+  img.src = image;
+  await img.decode();
+
+  currentBackground.value = image;
+}
 
 const currentSection = ref<'none' | 'about' | 'events' | 'sauna' | 'reserve'>('none');
 
@@ -62,27 +138,6 @@ watch(currentSection, () => {
   isLocked.value = currentSection.value != 'none';
 })
 
-const currentImage = ref();
-const backgroundImage = computed(() => {
-  const image = currentImage.value ?? currentCompany.value?.slider?.[0];
-  return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
-});
-
-onMounted(() => {
-  currentCompany.value?.sections?.forEach((section) => {
-    const { isLoading } = useImage({ src: section.background })
-  });
-});
-
-function updateCurrentImage(image?: string) {
-  if (image == undefined) {
-    return;
-  }
-
-  document.createElement('img').setAttribute('src', image);
-  currentImage.value = image;
-}
-
 const containerPadding =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
@@ -110,13 +165,11 @@ const subcontentPadding =  computed(() => {
 const containerGap =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
-      return '40px';
     case 'S':
-      return '40px';
+      return '20px';
     case 'L':
-      return '60px';
     case 'M':
-      return '60px';
+      return '30px';
   }
 });
 
@@ -136,22 +189,6 @@ const containerGrid = computed(() => {
   return '1fr 1fr';
 });
 
-const borderTop = computed(() => {
-  if (containerDirection.value == 'column') {
-    return '2px solid white';
-  }
-
-  return 'none';
-});
-
-const borderLeft = computed(() => {
-  if (containerDirection.value == 'column') {
-    return 'none';
-  }
-
-  return '2px solid white';
-});
-
 const textAlign = computed(() => {
   if (containerDirection.value == 'column') {
     return 'center';
@@ -162,69 +199,201 @@ const textAlign = computed(() => {
 </script>
 
 <template>
-  <Head>
-    <Title>{{ currentCompany?.seoTitle ?? '' }}</Title>
-    <Meta name="description" :content="currentCompany?.seoDescription ?? ''" />
-  </Head>
+<div
+  class="id-page"
+  :style="{
+    backgroundImage: backgroundImage,
+  }"
+  ref="container"
+>
+<Head>
+  <Title>{{ currentCompany?.seoTitle ?? 'Сеть ресторанов DRINK IN GROUP' }}</Title>
+  <Meta name="description" :content="currentCompany?.seoDescription ?? ''" />
+</Head>
 
-  <DPopupReserve
-    v-if="currentSection == 'reserve'"
-    :company="currentCompany"
-    @close="currentSection = 'none'"
-  />
+<DPopupReserve
+  v-if="currentSection == 'reserve'"
+  :company="currentCompany"
+  @close="currentSection = 'none'"
+/>
 
-  <DPopupAbout
-    v-if="currentSection == 'about'"
-    :company="currentCompany"
-    @close="currentSection = 'none'"
-  />
+<DPopupAbout
+  v-if="currentSection == 'about'"
+  :company="currentCompany"
+  @close="currentSection = 'none'"
+/>
 
-  <DPopupEvents
-    v-if="currentSection == 'events'"
-    :company="currentCompany"
-    @close="currentSection = 'none'"
-  />
+<DPopupEvents
+  v-if="currentSection == 'events'"
+  :company="currentCompany"
+  @close="currentSection = 'none'"
+/>
 
-  <DPopupSauna
-    v-if="currentSection == 'sauna'"
-    :company="currentCompany"
-    @close="currentSection = 'none'"
-  />
-
-  <DBannerLogo :subtitle="currentCompany?.name" />
-
-  <div
-    class="d-company"
-    :style="{
-      backgroundImage: backgroundImage,
-      overflow: currentSection == 'none' ? 'auto' : 'hidden',
-    }"
-  >
-    <div class="d-company-wrapper">
-      <div class="d-submenu">
-        <DText
-          v-for="section in currentCompany?.sections"
-          theme="Title-M-Medium"
-          clickable
-          @mouseover="updateCurrentImage(section.background)"
-          @click="action(section)"
-        >
-          {{ getSectionTitle(section.type) }}
-        </DText>
+<DPopupSauna
+  v-if="currentSection == 'sauna'"
+  :company="currentCompany"
+  @close="currentSection = 'none'"
+/>
+<ClientOnly>
+  <div class="id-page__content" ref="target">
+    <div v-if="!isMobile" class="id-page__menu">
+      <div class="id-page__logo">
+        <NuxtLink to="/">
+          <DIcon icon="drinkInGroupLogo" :filled="false" />
+        </NuxtLink>
       </div>
-      <div class="d-subcontent">
-        <DText theme="Body-S">наш адрес</DText>
-        <DText theme="Body-L-Medium" style="padding-bottom: 40px">{{ currentCompany?.fullAddress }}</DText>
-        <DText theme="Body-S">режим работы</DText>
-        <DText theme="Body-L-Medium" style="padding-bottom: 40px">{{ currentCompany?.timeOfWork }}</DText>
-        <DText theme="Body-S">телефон</DText>
-        <a :href="`tel:${currentCompany?.phone}`"><DText theme="Body-L-Medium">{{ currentCompany?.phone }}</DText></a>
+      <div
+        v-for="company in menuCompanies"
+        :key="company.id"
+        class="index-page__menu-item"
+      >
+        <NuxtLink :to="`/${company?.seoUrl}`">
+          <DBannerMenu
+            :company="company"
+          />
+        </NuxtLink>
+      </div>
+    </div>
+    <div class="id-page__company-card">
+      <div class="d-company-wrapper">
+        <div v-if="isActive" class="d-submenu">
+          <div v-if="isMobile" class="id-page__logo_mobile">
+            <NuxtLink to="/">
+              <DIcon icon="drinkInGroupLogo" :filled="false" />
+            </NuxtLink>
+          </div>
+          <DText class="d-banner-menu-text" theme="Title-XS">{{ currentCompany?.name }}</DText>
+          <hr class="d-company-wrappe__hr" />
+          <DText
+            v-for="(section, index) in currentCompany?.sections"
+            :key="index"
+            theme="Title-M-Medium"
+            clickable
+            :style="{ marginBottom: containerGap }"
+            @mouseover="updateBackground(section.background)"
+            @click="action(section)"
+          >
+            {{ getSectionTitle(section.type) }}
+          </DText>
+        </div>
+        <div v-else class="d-submenu">
+          <div v-if="isMobile" class="id-page__logo_mobile">
+            <NuxtLink to="/">
+              <DIcon icon="drinkInGroupLogo" :filled="false" />
+            </NuxtLink>
+          </div>
+          <DText class="d-banner-menu-text" theme="Title-XS">{{ currentCompany?.name }}</DText>
+          <hr class="d-company-wrappe__hr" />
+          <DText theme="Title-M-Medium" style="text-align: center;">Скоро открытие</DText>
+        </div>
+        <div v-if="isMobile" class="d-slider-controls">
+          <DIcon
+            icon="arrowLeft"
+            filled
+            :clickable="allowLeft"
+            @click="goLeft"
+          />
+          <div class="d-dots">
+            <div v-for="company in companies" class="d-dot" :class="company == currentCompany ? 'd-dot_active' : ''">
+            </div>
+          </div>
+          <DIcon
+            icon="arrowRight"
+            filled
+            :clickable="allowRight"
+            @click="goRight"
+          />
+        </div>
+        <div class="d-subcontent">
+          <div class="d-subcontent-item" :style="{ textAlign: isMobile ? 'center' : 'left'}">
+            <DText theme="Body-S">наш адрес</DText>
+            <DText v-if="isMobile" theme="Body-L-Medium">{{ currentCompany?.fullAddress }}</DText>
+            <template v-else>
+              <DText theme="Body-L-Medium">{{ currentCompany?.city }}</DText>
+              <DText theme="Body-L-Medium">{{ currentCompany?.address }}</DText>
+            </template>
+          </div>
+          <div class="d-subcontent-item" :style="{ textAlign: isMobile ? 'center' : 'left'}">
+            <DText theme="Body-S">режим работы</DText>
+            <template v-if="isMobile">
+              <DText theme="Body-L-Medium">{{ currentCompany?.timeOfWork }}</DText>
+            </template>
+            <template v-else>
+              <DText v-for="(time, index) in timeOfWork" :key="index" theme="Body-L-Medium">{{ time }}</DText>
+            </template>
+          </div>
+          <div class="d-subcontent-item" :style="{ textAlign: isMobile ? 'center' : 'left'}">
+            <DText theme="Body-S">телефон</DText>
+            <a :href="`tel:${currentCompany?.phone}`"><DText theme="Body-L-Medium">{{ currentCompany?.phone }}</DText></a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</ClientOnly>
+</div>
 </template>
 
-<style>
+<style lang="scss">
+.id-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.id-page__content {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 60px;
+  padding: 40px;
+}
+
+.id-page__menu {
+  flex: 0 1 700px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.id-page__menu-item:not(:last-child) {
+  border-bottom: 1px solid $color-white;
+}
+
+.id-page__logo {
+  color: $color-white;
+  margin-bottom: 40px;
+
+  & .nuxt-icon svg{
+    height: 100px !important;
+    font-size: 250px;
+    margin: 0;
+  }
+}
+
+.id-page__logo_mobile {
+  color: $color-white;
+  margin-bottom: 10px;
+
+  & .nuxt-icon svg{
+    height: 50px !important;
+    font-size: 150px;
+    margin: 0;
+  }
+}
+
+.id-page__company-card {
+  width: 100%;
+  max-width: 100wh;
+  overflow: hidden;
+}
+
 .d-border {
   border-radius: 100px;
   border: 1px solid rgba(0, 0, 0, 0.50);
@@ -246,8 +415,9 @@ const textAlign = computed(() => {
 }
 
 .d-company-wrapper {
-  display: grid;
-  grid-template-columns: v-bind(containerGrid);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 700px;
 }
 
 .d-submenu {
@@ -255,17 +425,59 @@ const textAlign = computed(() => {
   flex-direction: column;
   gap: v-bind(containerGap);
   justify-content: flex-start;
-  padding: 70px 10px;
+  align-items: center;
+  padding: 0 10px 0 10px;
+}
+
+.d-company-wrappe__hr {
+  border: none;
+  border-left: 2px solid rgba(186, 186, 193, 0.4);
+  height: 60px;
+  width: 2px;
 }
 
 .d-subcontent {
-  border-top: v-bind(borderTop);
-  border-left: v-bind(borderLeft);
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: space-evenly;
+  padding: 70px 10px 10px 10px;
+  margin-top: 30px;
+  padding-left: v-bind(subcontentPadding);
+}
+
+.d-subcontent-item {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  justify-content: center;
-  padding: 70px 10px;
-  padding-left: v-bind(subcontentPadding);
+  padding-bottom: 32px;
+}
+
+.d-slider-controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  align-items: center;
+}
+
+.d-dots {
+  display: flex;
+  justify-content: space-between;
+  gap: 7px;
+  align-items: center;
+}
+
+.d-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 100px;
+  background-color: white;
+  opacity: 0.6;
+}
+
+.d-dot_active {
+  width: 30px;
 }
 </style>

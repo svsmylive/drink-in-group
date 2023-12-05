@@ -1,21 +1,16 @@
 export const useCompanies = () => {
-  const companiesData = ref();
-
   const { formatCompanies } = useFormatCompanies();
-  const companies = computed(() => formatCompanies(companiesData.value?.value?.data) ?? []);
 
   async function update() {
-    if (companies.value.length > 0) {
-      return;
-    }
-
-    const { data } = await useFetch(formatApi('/institutions/'));
-    companiesData.value = data;
+    const data = await useAsyncData('companies', async () => {
+      const { data } = await $fetch(formatApi('/institutions/'));
+      return formatCompanies(data) ?? [];
+    })
   }
 
   update();
 
   return {
-    companies,
+    companies: useNuxtData('companies').data,
   };
 }

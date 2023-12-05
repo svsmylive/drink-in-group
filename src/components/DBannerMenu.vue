@@ -18,14 +18,9 @@ const bannerMenuModifiers = computed(() => ({
     class="d-banner-menu"
     :class="bannerMenuModifiers"
   >
-    <DText class="d-banner-menu-text" theme="Body-M">{{ company?.city }}</DText>
-    <div class="d-banner-menu__delimiters">
-      <hr class="d-banner-menu__pre-delimiter">
-      <hr class="d-banner-menu__delimiter">
-    </div>
-    <DText class="d-banner-menu-text" theme="Body-XS">{{ company?.type }}</DText>
-    <DText class="d-banner-menu-text" theme="Title-XS">{{ company?.name }}</DText>
-    <DText class="d-banner-menu-text" theme="Body-XS">{{ company?.isActive ? company?.address : 'Скоро открытие' }}</DText>
+    <DText class="d-banner-menu-text" theme="Body-XS">{{ company?.type?.toLowerCase() }}</DText>
+    <DText class="d-banner-menu-text d-banner-menu__name" theme="Title-XS">{{ company?.name }}</DText>
+    <DText class="d-banner-menu-text" theme="Body-S">{{ `${company?.city}${company?.isActive ? '' : ', cкоро открытие'}`.trim() }}</DText>
   </div>
 </template>
 
@@ -36,36 +31,18 @@ const bannerMenuModifiers = computed(() => ({
   display: inline-flex;
   flex-direction: column;
   gap: 8px;
-  padding-right: -1px;
+  padding: 16px 0;
   cursor: pointer;
+  width: 100%;
+  max-width: 550px;
 
-  &.d-banner-menu--active {
+  &:hover {
     opacity: 1;
-
-    .d-banner-menu__pre-delimiter {
-      opacity: 0.4;
-    }
   }
 }
 
-.d-banner-menu-text {
-  padding-left: 60px;
-  padding-right: 30px;
-}
-
-.d-banner-menu__delimiters {
-  display: flex;
-  align-items: flex-end;
-}
-
-.d-banner-menu__pre-delimiter {
-  opacity: 1;
-  width: 60px;
-  border: 1px solid $color-white;
-}
-
-.d-banner-menu__delimiter {
-  width: 100%;
-  border: 1px solid $color-white;
+.d-banner-menu__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

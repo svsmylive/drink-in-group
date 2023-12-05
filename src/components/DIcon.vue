@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  icon: 'arrow' | 'button' | 'buttonDark' | 'close' | 'closeLight' | 'upload' | 'drinkInGroupLogo';
+  icon: 'arrow' | 'arrowRight' | 'arrowLeft' | 'button' | 'buttonDark' | 'close' | 'closeLight' | 'upload' | 'drinkInGroupLogo';
   filled?: boolean;
   clickable?: boolean;
 }
