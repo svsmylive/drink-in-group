@@ -30,6 +30,8 @@ const emits = defineEmits<Emits>();
 
 <style lang="scss">
 .d-popup {
+  @include webkitScrollbar();
+
   position: fixed;
   top: 0;
   text-align: center;

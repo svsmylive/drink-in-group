@@ -98,6 +98,8 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
 }
 
 .index-page__menu {
+  @include webkitScrollbar();
+
   flex: 0 1 700px;
   display: flex;
   flex-direction: column;

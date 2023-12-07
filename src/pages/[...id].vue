@@ -181,14 +181,6 @@ const containerDirection = computed(() => {
   return 'row';
 });
 
-const containerGrid = computed(() => {
-  if (containerDirection.value == 'column') {
-    return '1fr';
-  }
-
-  return '1fr 1fr';
-});
-
 const textAlign = computed(() => {
   if (containerDirection.value == 'column') {
     return 'center';
@@ -343,6 +335,8 @@ const textAlign = computed(() => {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  width: 100%;
+  overflow: hidden;
 }
 
 .id-page__content {
