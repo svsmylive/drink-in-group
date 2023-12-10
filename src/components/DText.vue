@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  theme: 'Title-L-Regular' | 'Title-M-Medium' | 'Title-M-Regular' | 'Title-S' | 'Title-XS'
+  theme: 'Title' | 'Title-L-Regular' | 'Title-M-Medium' | 'Title-M-Regular' | 'Title-S' | 'Title-XS'
     | 'Body-L-Medium' | 'Body-L-Regular' | 'Body-M' | 'Body-S' | 'Body-XS' | 'Body-XXS'
     | 'Button-Primary' | 'Button-Secondary' | 'Number';
   clickable?: boolean;
@@ -43,6 +43,21 @@ const typographyModifiers = computed(() => [
 .d-text {
   font-family: 'Golos Text', 'Trebuchet MS';
   color: $color-white;
+
+  &.d-text_title {
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-size: 40px;
+    line-height: 40px;
+    white-space: normal;
+    text-align: center;
+
+    &.d-text_size-xs {
+      font-size: 24px;
+      line-height: 36px;
+    }
+  }
 
   &.d-text_title-l-regular {
     font-weight: 500;
@@ -187,7 +202,7 @@ const typographyModifiers = computed(() => [
     font-weight: 500;
 
     &.d-text_size-xs {
-      font-size: 28px;
+      font-size: 20px;
       line-height: 36px;
     }
 

@@ -38,7 +38,6 @@ a, a:visited {
 }
 .page-enter-from,
 .page-leave-to {
-  /* opacity: 0; */
   background-color: black;
   filter: blur(1rem);
 }

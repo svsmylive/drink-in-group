@@ -1,51 +1,31 @@
 <script setup lang="ts">
+import { register } from 'swiper/element/bundle';
+register();
+
 import { useScrollLock } from '@vueuse/core';
-import { usePointerSwipe } from '@vueuse/core';
-
-const target = ref<HTMLElement | null>(null)
-const container = ref<HTMLElement | null>(null)
-
-const containerWidth = computed(() => container.value?.offsetWidth)
-
-const { distanceX } = usePointerSwipe(target, {
-  onSwipeEnd() {
-    if (!containerWidth.value) {
-      return;
-    }
-
-    if (Math.abs(distanceX.value) > containerWidth.value / 10) {
-      if (distanceX.value > 0) goRight();
-      else goLeft();
-    }
-  },
-})
 
 const { companies } = useCompanies();
 
 const router = useRouter()
 const route = useRoute();
-const id = Array.isArray(route.params.id) ? route.params.id.join('/') : route.params.id;
+const id = ref(Array.isArray(route.params.id) ? route.params.id.join('/') : route.params.id);
 
-const currentCompanyIndex = computed(() => companies.value?.findIndex((company: any) => company.seoUrl === id || company.name === id))
+const currentCompanyIndex = computed(() => companies.value?.findIndex((company: any) => company.seoUrl === id.value || company.name === id.value))
 const currentCompany = computed(() => companies.value?.[currentCompanyIndex.value]);
 
 const isActive = computed(() => currentCompany.value?.isActive);
 const isMobile = computed(() => useLayoutSize() == 'XS' || useLayoutSize() == 'S');
-const allowLeft = computed(() => currentCompanyIndex.value > 0);
-const allowRight = computed(() => currentCompanyIndex.value < companies.value?.length - 1);
 
 function goLeft() {
-  if (allowLeft.value) {
-    const route = companies.value?.[currentCompanyIndex.value - 1]?.seoUrl;
-    router.push(`/${route}`);
-  }
+  const index = currentCompanyIndex.value == 0 ? companies.value.length - 1 : currentCompanyIndex.value - 1;
+  const route = companies.value?.[index]?.seoUrl;
+  router.push(`/${route}`);
 }
 
 function goRight() {
-  if (allowRight.value) {
-    const route = companies.value?.[currentCompanyIndex.value + 1]?.seoUrl;
-    router.push(`/${route}`);
-  }
+  const index = currentCompanyIndex.value >= companies.value.length - 1 ? 0 : currentCompanyIndex.value + 1;
+  const route = companies.value?.[index]?.seoUrl;
+  router.push(`/${route}`);
 }
 
 const timeOfWork = computed(() => {
@@ -150,15 +130,14 @@ const containerPadding =  computed(() => {
   }
 });
 
-const subcontentPadding =  computed(() => {
+const idPageContentPadding =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
-      return '0';
     case 'S':
-      return '40px';
+      return '30px 5px';
     case 'L':
     case 'M':
-      return '120px';
+      return '40px';
   }
 });
 
@@ -188,6 +167,24 @@ const textAlign = computed(() => {
 
   return 'left';
 })
+
+function activeIndexChange(e: any) {
+  let index = e.target?.swiper?.realIndex ?? currentCompanyIndex.value;
+
+  while (index >= companies.value?.length) {
+    index -= companies.value?.length;
+  }
+
+  if (index == currentCompanyIndex.value) {
+    return;
+  }
+
+  const route = companies.value?.[index]?.seoUrl;
+
+  id.value = route;
+
+  window.history.pushState(null, companies.value?.[index]?.seoTitle, `/${route}`);
+}
 </script>
 
 <template>
@@ -248,41 +245,62 @@ const textAlign = computed(() => {
     </div>
     <div class="id-page__company-card">
       <div class="d-company-wrapper">
-        <div v-if="isActive" class="d-submenu">
-          <div v-if="isMobile" class="id-page__logo_mobile">
-            <NuxtLink to="/">
-              <DIcon icon="drinkInGroupLogo" :filled="false" />
-            </NuxtLink>
-          </div>
-          <DText class="d-banner-menu-text" theme="Title-XS">{{ currentCompany?.name }}</DText>
+        <div class="d-submenu">
+          <template v-if="isMobile">
+            <div v-if="isMobile" class="id-page__logo_mobile">
+              <NuxtLink to="/">
+                <DIcon icon="drinkInGroupLogo" :filled="false" />
+              </NuxtLink>
+            </div>
+            <ClientOnly>
+              <swiper-container
+                :initialSlide="currentCompanyIndex + companies.length"
+                :centeredSlides="true"
+                :slidesPerView="1.5"
+                :loop="true"
+                :centerInsufficientSlides="true"
+                :spaceBetween="40"
+                style="max-width: 100vw"
+                @activeindexchange="activeIndexChange"
+              >
+                <swiper-slide
+                  v-for="(company, index) in [...companies, ...companies, ...companies]"
+                  :key="index"
+                  :index="index"
+                  class="text-slide"
+                >
+                  <DText
+                    class="d-banner-menu-text"
+                    theme="Title"
+                    :style="{ opacity: currentCompany?.seoUrl == company?.seoUrl ? 1 : 0.4 }"
+                  >{{ company?.name }}</DText>
+                </swiper-slide>
+              </swiper-container>
+            </ClientOnly>
+          </template>
+          <DText v-else class="d-banner-menu-text" theme="Title">{{ currentCompany?.name }}</DText>
           <hr class="d-company-wrappe__hr" />
-          <DText
-            v-for="(section, index) in currentCompany?.sections"
-            :key="index"
-            theme="Title-M-Medium"
-            clickable
-            :style="{ marginBottom: containerGap }"
-            @mouseover="updateBackground(section.background)"
-            @click="action(section)"
-          >
-            {{ getSectionTitle(section.type) }}
-          </DText>
-        </div>
-        <div v-else class="d-submenu">
-          <div v-if="isMobile" class="id-page__logo_mobile">
-            <NuxtLink to="/">
-              <DIcon icon="drinkInGroupLogo" :filled="false" />
-            </NuxtLink>
-          </div>
-          <DText class="d-banner-menu-text" theme="Title-XS">{{ currentCompany?.name }}</DText>
-          <hr class="d-company-wrappe__hr" />
-          <DText theme="Title-M-Medium" style="text-align: center;">Скоро открытие</DText>
+          <template v-if="isActive">
+            <DText
+              v-for="(section, index) in currentCompany?.sections"
+              :key="index"
+              theme="Title-M-Medium"
+              clickable
+              :style="{ marginBottom: containerGap }"
+              @mouseover="updateBackground(section.background)"
+              @click="action(section)"
+            >
+              {{ getSectionTitle(section.type) }}
+            </DText>
+          </template>
+          <template v-else>
+            <DText theme="Title-M-Medium" style="text-align: center;">Скоро открытие</DText>
+          </template>
         </div>
         <div v-if="isMobile" class="d-slider-controls">
           <DIcon
             icon="arrowLeft"
             filled
-            :clickable="allowLeft"
             @click="goLeft"
           />
           <div class="d-dots">
@@ -292,7 +310,6 @@ const textAlign = computed(() => {
           <DIcon
             icon="arrowRight"
             filled
-            :clickable="allowRight"
             @click="goRight"
           />
         </div>
@@ -344,8 +361,8 @@ const textAlign = computed(() => {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 60px;
-  padding: 40px;
+  gap: 30px;
+  padding: v-bind(idPageContentPadding);
 }
 
 .id-page__menu {
@@ -384,7 +401,7 @@ const textAlign = computed(() => {
 
 .id-page__company-card {
   width: 100%;
-  max-width: 100wh;
+  max-width: 100vw;
   overflow: hidden;
 }
 
@@ -439,7 +456,6 @@ const textAlign = computed(() => {
   justify-content: space-evenly;
   padding: 70px 10px 10px 10px;
   margin-top: 30px;
-  padding-left: v-bind(subcontentPadding);
 }
 
 .d-subcontent-item {
@@ -454,6 +470,8 @@ const textAlign = computed(() => {
   justify-content: space-between;
   margin-top: 30px;
   align-items: center;
+  padding: 0 40px;
+  box-sizing: border-box;
 }
 
 .d-dots {
@@ -473,5 +491,24 @@ const textAlign = computed(() => {
 
 .d-dot_active {
   width: 30px;
+}
+
+.d-banner-menu-text {
+  text-wrap: nowrap !important;
+}
+
+.text-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.swiper-slide-prev {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.swiper-slide-next {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>
