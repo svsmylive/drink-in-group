@@ -47,14 +47,24 @@ class Institution extends Model
     public const SAUNA_TYPE = 'Сауна';
 
     private const TYPES_OF_INSTITUTIONS = [
-        'Ресторан', 'Караоке', 'Сауна',
+        'Ресторан',
+        'Караоке',
+        'Сауна',
     ];
 
     private const SAUNA_INCLUDES = [
-        'Финская сауна', 'Бассейн с гидромассажем, водопадом и гейзером', 'Камин',
-        'Купель', 'Банные принадлежности', 'Кальян',
-        'Караоке', 'Бильярд', 'Спутниковое TV',
-        'Домашний кинотеатр', 'Аудио / видео аппаратура', 'Банкетный зал',
+        'Финская сауна',
+        'Бассейн с гидромассажем, водопадом и гейзером',
+        'Камин',
+        'Купель',
+        'Банные принадлежности',
+        'Кальян',
+        'Караоке',
+        'Бильярд',
+        'Спутниковое TV',
+        'Домашний кинотеатр',
+        'Аудио / видео аппаратура',
+        'Банкетный зал',
     ];
 
     private const SAUNA_INCLUDES_ADDITIONALLY = [
@@ -154,17 +164,26 @@ class Institution extends Model
 
     public function detailImages(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'detailImages');
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'detailImages'
+        )->orderBy('sort');
     }
 
     public function sliderImagesDesktop(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'sliderImagesDesktop');
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'sliderImagesDesktop'
+        )->orderBy('sort');
     }
 
     public function sliderImagesMobile(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'sliderImagesMobile');
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'sliderImagesMobile'
+        )->orderBy('sort');
     }
 
     public function logo(): MorphToMany
@@ -179,36 +198,49 @@ class Institution extends Model
 
     public function saunaImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'saunaImage');
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'saunaImage'
+        )->orderBy('sort');
     }
 
     public function menuBackgroundImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'menuBackgroundImage');
-
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'menuBackgroundImage'
+        )->orderBy('sort');
     }
 
     public function institutionBackgroundImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'institutionBackgroundImage');
-
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'institutionBackgroundImage'
+        )->orderBy('sort');
     }
 
     public function reserveBackgroundImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'reserveBackgroundImage');
-
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'reserveBackgroundImage'
+        )->orderBy('sort');
     }
 
     public function eventBackgroundImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'eventBackgroundImage');
-
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'eventBackgroundImage'
+        )->orderBy('sort');
     }
 
     public function priceAndServicesBackgroundImage(): MorphToMany
     {
-        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where('group', 'priceAndServicesBackgroundImage');
-
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable')->where(
+            'group',
+            'priceAndServicesBackgroundImage'
+        )->orderBy('sort');
     }
 }
