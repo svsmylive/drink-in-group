@@ -4,27 +4,29 @@ const { companies } = useCompanies();
 const isMobile = computed(() => useLayoutSize() == 'XS' || useLayoutSize() == 'S');
 
 const currentBackground = ref();
+const currentCompany = ref();
+
+
+const slider = computed(() => isMobile.value ? currentCompany.value?.mobileSlider : currentCompany.value?.slider);
 
 const backgroundImage = computed(() => {
-  const image = currentBackground.value ?? companies.value?.[0]?.slider?.[0];
+  const image = currentBackground.value ?? isMobile.value ? companies.value?.[0]?.mobileSlider?.[0] : companies.value?.[0]?.slider?.[0];
 
   if (image != undefined) {
     return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
   }
 });
 
-async function updateBackground(company?: any) {
-  const image = company?.slider?.[0];
+async function setCurrentCompany(company?: any) {
+  const image = isMobile.value ? company?.mobileSlider?.[0] : company?.slider?.[0];
 
-  if (image == undefined || currentBackground.value == image) {
-    return;
+  if (image != undefined) {
+    const img = new Image();
+    img.src = image;
+    await img.decode();
+
+    currentCompany.value = company;
   }
-
-  const img = new Image();
-  img.src = image;
-  await img.decode();
-
-  currentBackground.value = image;
 }
 
 const { data } = await useFetch<{
@@ -43,7 +45,6 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
   class="index-page"
   :style="{
     backgroundImage: backgroundImage,
-    backgroundColor: 'blueviolet',
   }"
 >
   <Head>
@@ -51,13 +52,14 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
     <Meta name="description" :content="seoDescription" />
   </Head>
   <ClientOnly>
+  <DSlider v-if="currentCompany != undefined" :images="slider" />
   <div class="index-page__content" :class="{ 'index-page__content_mobile': isMobile }">
     <div class="index-page__menu" :class="{ 'index-page__menu_mobile': isMobile }">
       <div
         v-for="company in companies"
         :key="company.id"
         class="index-page__menu-item"
-        @mouseover="updateBackground(company)"
+        @mouseover="setCurrentCompany(company)"
       >
         <NuxtLink :to="company?.seoUrl">
           <DBannerMenu
@@ -91,6 +93,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  z-index: 100;
 }
 
 .index-page__content_mobile {
@@ -110,6 +113,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
 .index-page__menu_mobile {
   max-height: none;
   overflow: visible;
+  flex: 0 1 600px;
 }
 
 .index-page__menu-item:not(:last-child) {

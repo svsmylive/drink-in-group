@@ -70,13 +70,13 @@ export const useFormatCompanies = () => {
   }
 
   function getSlider(data: any) {
-    const layoutSize = useLayoutSize();
+    return data?.slider_images_desktop?.map((image: any) => formatCompanyUrl(image?.url)) ?? [];
+  }
 
-    if ((layoutSize == 'XS' || layoutSize == 'S') && data?.slider_images_mobile?.length > 0) {
-      return data?.slider_images_mobile.map((image: any) => formatCompanyUrl(image?.url)) ?? [];
-    }
+  function getMobileSlider(data: any) {
+    const slider = data?.slider_images_mobile?.length > 0 ? data.slider_images_mobile : data?.slider_images_desktop;
 
-    return data?.slider_images_desktop.map((image: any) => formatCompanyUrl(image?.url)) ?? [];
+    return slider?.map((image: any) => formatCompanyUrl(image?.url)) ?? [];
   }
 
   function formatCompanies(data: any) {
@@ -100,6 +100,7 @@ export const useFormatCompanies = () => {
       seoDescription: item?.description ?? item?.name ?? '',
 
       slider: getSlider(item),
+      mobileSlider: getMobileSlider(item),
 
       sections: getSections(item),
     }))

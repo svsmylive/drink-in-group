@@ -10,21 +10,21 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@nuxtjs/google-fonts": "^3.0.1",
+    "@nuxt/devtools": "1.0.5",
+    "@nuxtjs/google-fonts": "3.1.1",
     "@vueuse/core": "10.6.0",
     "@vueuse/nuxt": "10.6.0",
     "nuxt": "3.8.1",
-    "typescript": "latest"
+    "typescript": "5.3.3"
   },
   "dependencies": {
-    "axios": "^1.5.0",
-    "dayjs": "^1.11.9",
-    "lodash.template": "^4.5.0",
-    "maska": "^2.1.10",
-    "nuxt-icons": "^3.2.1",
-    "nuxt-swiper": "^1.1.1",
-    "sass": "^1.63.6",
-    "yandex-metrika-module-nuxt3": "^1.5.3"
+    "axios": "1.6.2",
+    "dayjs": "1.11.10",
+    "lodash.template": "4.5.0",
+    "maska": "2.1.10",
+    "nuxt-icons": "3.2.1",
+    "nuxt-swiper": "1.2.2",
+    "sass": "1.69.5",
+    "yandex-metrika-module-nuxt3": "1.5.3"
   }
 }

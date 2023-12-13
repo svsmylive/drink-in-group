@@ -46,7 +46,7 @@ const menuCompanies = computed(() => {
 const currentBackground = ref();
 
 const backgroundImage = computed(() => {
-  const image = currentBackground.value ?? currentCompany.value.slider?.[0];
+  const image = currentBackground.value;
 
   if (image != undefined) {
     return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
@@ -118,6 +118,14 @@ watch(currentSection, () => {
   isLocked.value = currentSection.value != 'none';
 })
 
+watch(currentCompany, () => {
+  if (currentCompany.value != undefined) {
+    updateBackground(isMobile.value ? currentCompany.value?.mobileSlider?.[0] : currentCompany.value?.slider?.[0]);
+  }
+}, { immediate: true });
+
+const dSubcontentFlexDirection = computed(() => isMobile.value ? 'column' : 'row');
+
 const containerPadding =  computed(() => {
   switch(useLayoutSize()) {
     case 'XS':
@@ -181,9 +189,10 @@ function activeIndexChange(e: any) {
 
   const route = companies.value?.[index]?.seoUrl;
 
-  id.value = route;
-
-  window.history.pushState(null, companies.value?.[index]?.seoTitle, `/${route}`);
+  if (route != undefined) {
+    id.value = route;
+    window.history.pushState(null, companies.value?.[index]?.seoTitle, `/${route}`);
+  }
 }
 </script>
 
@@ -256,17 +265,15 @@ function activeIndexChange(e: any) {
               <swiper-container
                 :initialSlide="currentCompanyIndex + companies.length"
                 :centeredSlides="true"
-                :slidesPerView="1.5"
+                slidesPerView="auto"
                 :loop="true"
-                :centerInsufficientSlides="true"
-                :spaceBetween="40"
+                :spaceBetween="30"
                 style="max-width: 100vw"
                 @activeindexchange="activeIndexChange"
               >
                 <swiper-slide
                   v-for="(company, index) in [...companies, ...companies, ...companies]"
-                  :key="index"
-                  :index="index"
+                  :key="`${company?.seoUrl}-${index}`"
                   class="text-slide"
                 >
                   <DText
@@ -450,7 +457,7 @@ function activeIndexChange(e: any) {
 .d-subcontent {
   border-top: 2px solid rgba(255, 255, 255, 0.4);
   display: flex;
-  flex-direction: row;
+  flex-direction: v-bind(dSubcontentFlexDirection);
   flex-wrap: wrap;
   gap: 32px;
   justify-content: space-evenly;
@@ -498,17 +505,6 @@ function activeIndexChange(e: any) {
 }
 
 .text-slide {
-  display: flex;
-  justify-content: center;
-}
-
-.swiper-slide-prev {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.swiper-slide-next {
-  display: flex;
-  justify-content: flex-start;
+  width: auto !important;
 }
 </style>

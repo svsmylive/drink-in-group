@@ -1,17 +1,23 @@
 <script setup lang="ts">
+import { register } from 'swiper/element/bundle';
+register();
+
 interface Props {
   images: Array<string>,
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
+
+const swiperRef = ref();
 </script>
 
 <template>
 <swiper-container
   v-if="images.length > 0"
+  ref="swiperRef"
   class="d-slider"
-  :autoplay="{ delay: 5000 }"
-  :loop="true"
+  :autoplay="{ delay: 2500 }"
+  :observeSlideChildren="true"
   :no-swiping="true"
   effect="fade"
   :crossFade="true"
@@ -19,7 +25,7 @@ const props = defineProps<Props>();
     <swiper-slide
       v-for="image in images"
       class="d-slider__slide"
-      :style="`background: linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), url('${image}'), lightgray -122.014px -359.319px / 112.553% 133.344% no-repeat;`"
+      :style="`background: linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`"
     ></swiper-slide>
 </swiper-container>
 </template>
