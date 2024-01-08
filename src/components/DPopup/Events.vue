@@ -53,8 +53,8 @@ function isNew(date: string, time: string) {
           <div class="d-popup-events__event-poster" :style="{ backgroundImage: `url(${event?.image})` }"></div>
           <div class="d-popup-events__event-info">
             <div class="d-popup-events__event-time">
-              <div class="d-border">{{ event?.date }}</div>
-              <div class="d-border">{{ event?.time }}</div>
+              <div class="d-border" v-if="event?.date">{{ event?.date }}</div>
+              <div class="d-border" v-if="event?.time">{{ event?.time }}</div>
               <div v-if="isNew(event?.date, event?.time)" class="d-border d-border__new-label">NEW</div>
             </div><br>
             <DText theme="Title-XS">{{ event?.title }}</DText><br>
@@ -84,7 +84,7 @@ function isNew(date: string, time: string) {
   text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 20px;
 }
 
@@ -95,6 +95,10 @@ function isNew(date: string, time: string) {
   flex-direction: v-bind(containerDirection);
   gap: 20px;
   align-items: center;
+}
+
+.d-popup-events__event-info {
+  width: 100%;
 }
 
 .d-popup-events__event:not(:last-child) {
