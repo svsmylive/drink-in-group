@@ -72,6 +72,7 @@ function getAboutLabel() {
     case 'Ресторан': return 'О ресторане';
     case 'Сауна': return 'О сауне';
     case 'Караоке': return 'О караоке';
+    case 'Бильярдная': return 'О бильярдной';
     default: return 'О заведении';
   }
 }

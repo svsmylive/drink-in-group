@@ -34,6 +34,9 @@ const headerText = computed(() => {
     case 'Караоке':
       text += ' караоке '
       break;
+    case 'Бильярдная':
+      text += ' стол в бильярдной '
+      break;
   }
   return `${text} ${company.value?.name}`;
 });
