@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\Services\PaymentInterface;
 use App\Models\Institution;
 use App\Observers\InstitutionObserver;
+use App\Services\YookassaService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentInterface::class, YookassaService::class);
     }
 
     /**

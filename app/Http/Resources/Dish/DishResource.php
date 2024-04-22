@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Resources\Dish;
+
+use App\Models\Category;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class DishResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        return
+            [
+                'id' => $this->id,
+                'name' => $this->name,
+                'price' => $this->price,
+                'preview_image' => $this->preview_image,
+                'detail_image' => $this->detail_image,
+                'category' => $this->formatCategory($this->category),
+            ];
+    }
+
+    /**
+     * @param Category $category
+     * @return Category
+     */
+    private function formatCategory(Category $category): Category
+    {
+        $category->setVisible(['id', 'name', 'preview_image']);
+
+        return $category;
+    }
+}

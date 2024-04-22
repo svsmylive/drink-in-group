@@ -30,5 +30,8 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
+    'yookassa' => [
+        'shop_id' => env('SHOP_ID', '929017'),
+        'secret_key' => env('SECRET_KEY', 'live_JX35ypQhmNyJk4YwXD413AO8gWEdUIw3vxdX2CR6BuM'),
+    ]
 ];
