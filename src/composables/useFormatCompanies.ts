@@ -61,10 +61,12 @@ export const useFormatCompanies = () => {
       });
     }
 
-    sections.push({
-      type: 'reserve',
-      background: formatCompanyUrl(data?.background_images?.reserve?.url),
-    });
+    if (data?.name?.toLowerCase() != 'вино и море') {
+      sections.push({
+        type: 'reserve',
+        background: formatCompanyUrl(data?.background_images?.reserve?.url),
+      });
+    }
 
     return sections;
   }
