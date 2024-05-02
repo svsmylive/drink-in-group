@@ -28,9 +28,12 @@ class DishRepository
                     'price' => $data['mitm_Price'],
                     'mvtp_ID' => $data['mitm_mvtp_ID'],
                     'category_external_id' => $categoryGuid
-                ]);
-        } catch (Exception) {
-            Log::channel('dish')->debug('Ошибка при создании блюда, dishGuid = ' . $data['mitm_ID']);
+                ]
+            );
+        } catch (Exception $e) {
+            Log::channel('dish')->debug(
+                'Ошибка при создании блюда, dishGuid = ' . $data['mitm_ID'] . ' message: ' . $e->getMessage()
+            );
         }
 
         return $dish;

@@ -28,6 +28,7 @@ class Category extends Model
         'preview_image',
         'external_id',
         'index',
+        'is_show',
     ];
 
     /**

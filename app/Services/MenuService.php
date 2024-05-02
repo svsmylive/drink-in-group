@@ -28,14 +28,16 @@ class MenuService
      */
     public function updateOrCreateFromApi(Collection $menuCollection): void
     {
-        foreach (collect($menuCollection['MenuItems'])->groupBy('mitm_mgrp_ID')->chunk(20) as $menu) {
+        foreach (collect($menuCollection['MenuItems'])->groupBy('mitm_mgrp_ID')->chunk(300) as $menu) {
             foreach ($menu as $categoryGuid => $dishes) {
                 $category = $this->tillypadService->getCategory($categoryGuid);
+
                 if (!$category) {
                     continue;
                 }
+
                 if (stristr($category['mgrp_Name'], '*')) {
-                    $category['mgrp_Name'] = trim(str_replace(['*', 'PV'], '', $category['mgrp_Name']));
+                    $category['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $category['mgrp_Name']));
                     $category = $this->categoryRepository->updateOrCreate($categoryGuid, $category);
 
                     if (isset($category['MenuGroupNotes'])) {
@@ -46,9 +48,10 @@ class MenuService
                         }
                     }
                 }
+
                 foreach ($dishes as $dishItem) {
                     if (stristr($dishItem['mitm_Name'], '*')) {
-                        $dishItem['mitm_Name'] = trim(str_replace(['*', 'PV'], '', $dishItem['mitm_Name']));
+                        $dishItem['mitm_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $dishItem['mitm_Name']));
                         $dish = $this->dishRepository->updateOrCreate($categoryGuid, $dishItem);
                         if (!$dish) {
                             continue;

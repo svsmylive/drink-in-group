@@ -37,9 +37,13 @@ class CategoryRepository
                 ],
                 [
                     'name' => $categoryData['mgrp_Name'],
-                ]);
-        } catch (Exception) {
-            Log::channel('category')->debug('Ошибка при создании категории, categoryGuid = ' . $categoryGuid);
+                    'is_show' => !$categoryData['mgrp_IsDisabled'],
+                ]
+            );
+        } catch (Exception $e) {
+            Log::channel('category')->debug(
+                'Ошибка при создании категории, categoryGuid = ' . $categoryGuid . ' message: ' . $e->getMessage()
+            );
         }
 
         return $category;
