@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Category\CategoriesEditScreen;
+use App\Orchid\Screens\Category\CategoriesListScreen;
+use App\Orchid\Screens\Dish\DishesEditScreen;
+use App\Orchid\Screens\Dish\DishesListScreen;
 use App\Orchid\Screens\Event\EventsEditScreen;
 use App\Orchid\Screens\Event\EventsListScreen;
 use App\Orchid\Screens\Institution\InstitutionEditScreen;
@@ -100,13 +104,24 @@ Route::screen('roles', RoleListScreen::class)
 
 
 Route::screen('institutions', InstitutionListScreen::class)->name('platform.systems.institutions');
-Route::screen('institutions/{institution}/edit', InstitutionEditScreen::class)->name('platform.systems.institutions.edit');
+Route::screen('institutions/{institution}/edit', InstitutionEditScreen::class)->name(
+    'platform.systems.institutions.edit'
+);
 Route::screen('institutions/create', InstitutionEditScreen::class)
     ->name('platform.systems.institutions.create');
+
 //настройка сео главной страницы
-Route::screen('institutions/{institution}/main/edit', InstitutionMainEditScreen::class)->name('platform.systems.institutions.main.edit');
+Route::screen('institutions/{institution}/main/edit', InstitutionMainEditScreen::class)->name(
+    'platform.systems.institutions.main.edit'
+);
 
 
 Route::screen('events', EventsListScreen::class)->name('platform.systems.events');
 Route::screen('events/create', EventsEditScreen::class)->name('platform.systems.events.create');
 Route::screen('events/{event}/edit', EventsEditScreen::class)->name('platform.systems.events.edit');
+
+Route::screen('categories', CategoriesListScreen::class)->name('platform.systems.categories');
+Route::screen('categories/{category}/edit', CategoriesEditScreen::class)->name('platform.systems.categories.edit');
+
+Route::screen('dishes', DishesListScreen::class)->name('platform.systems.dishes');
+Route::screen('dishes/{dish}/edit', DishesEditScreen::class)->name('platform.systems.dishes.edit');

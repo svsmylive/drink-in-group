@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Orchid\Presenters\Category\CategoryPresenter;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
+use Orchid\Filters\Types\WhereDateStartEnd;
+use Orchid\Screen\AsSource;
 
 /**
  * @property int $id
@@ -18,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends Model
 {
-    use HasFactory;
+    use AsSource, Filterable, Attachable;
 
     protected $table = 'categories';
 
@@ -30,6 +36,25 @@ class Category extends Model
         'index',
         'is_show',
     ];
+
+    protected array $allowedFilters = [
+        'name' => Like::class,
+        'is_show' => Where::class,
+        'updated_at' => WhereDateStartEnd::class,
+        'created_at' => WhereDateStartEnd::class,
+    ];
+
+    protected array $allowedSorts = [
+        'name',
+        'is_show',
+        'updated_at',
+        'created_at',
+    ];
+
+    public function presenter(): CategoryPresenter
+    {
+        return new CategoryPresenter($this);
+    }
 
     /**
      * @return HasMany

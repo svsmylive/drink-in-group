@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Orchid\Presenters\Dish\DishPresenter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
+use Orchid\Filters\Types\WhereDateStartEnd;
+use Orchid\Screen\AsSource;
 
 /**
  * @property int $id
@@ -21,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Dish extends Model
 {
-    use HasFactory;
+    use AsSource, Filterable, Attachable;
 
     protected $table = 'dishes';
 
@@ -37,6 +43,26 @@ class Dish extends Model
         'institution_id',
     ];
 
+    protected array $allowedFilters = [
+        'name' => Like::class,
+        'is_show' => Where::class,
+        'updated_at' => WhereDateStartEnd::class,
+        'created_at' => WhereDateStartEnd::class,
+    ];
+
+    protected array $allowedSorts = [
+        'name',
+        'is_show',
+        'updated_at',
+        'created_at',
+        'price',
+    ];
+
+    public function presenter(): DishPresenter
+    {
+        return new DishPresenter($this);
+    }
+
     /**
      * @return BelongsTo
      */
@@ -44,5 +70,10 @@ class Dish extends Model
     {
         return $this->belongsTo(Category::class, 'category_external_id', 'external_id')
             ->where('is_show', true);
+    }
+
+    public function institution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class, 'institution_id', 'id');
     }
 }

@@ -42,6 +42,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.users')
                 ->route('platform.systems.events'),
 
+            Menu::make('Категории блюд')
+                ->permission('platform.systems.users')
+                ->route('platform.systems.categories'),
+
+            Menu::make('Блюда')
+                ->permission('platform.systems.users')
+                ->route('platform.systems.dishes'),
+
             Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')
