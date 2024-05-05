@@ -36,15 +36,16 @@ class CategoryRepository
         $category = null;
         try {
             /**@var Category $category */
-            $category = Category::query()->updateOrCreate(
-                [
-                    'external_id' => $categoryGuid,
-                ],
-                [
-                    'name' => $categoryData['mgrp_Name'],
-                    'is_show' => !$categoryData['mgrp_IsDisabled'],
-                ]
-            );
+            $category = Category::query()->where('external_id', $categoryGuid)->first();
+
+            if (!$category) {
+                $category = Category::query()->create(
+                    [
+                        'name' => $categoryData['mgrp_Name'],
+                        'external_id' => $categoryGuid
+                    ]
+                );
+            }
         } catch (Exception $e) {
             Log::channel('category')->debug(
                 'Ошибка при создании категории, categoryGuid = ' . $categoryGuid . ' message: ' . $e->getMessage()

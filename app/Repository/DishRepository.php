@@ -33,18 +33,25 @@ class DishRepository
 
         try {
             /**@var Dish $dish */
-            $dish = Dish::query()->updateOrCreate(
-                [
+            $dish = Dish::query()->where('external_id', $data['mitm_ID'])->first();
+
+            if (!$dish) {
+                $dish = Dish::query()->create([
                     'external_id' => $data['mitm_ID'],
-                ],
-                [
                     'name' => $data['mitm_Name'],
                     'price' => $data['mitm_Price'],
                     'mvtp_ID' => $data['mitm_mvtp_ID'],
                     'category_external_id' => $categoryGuid,
                     'institution_id' => $institution->id,
-                ]
-            );
+                ]);
+            } else {
+                $dish->update([
+                    'price' => $data['mitm_Price'],
+                    'mvtp_ID' => $data['mitm_mvtp_ID'],
+                    'category_external_id' => $categoryGuid,
+                    'institution_id' => $institution->id,
+                ]);
+            }
         } catch (Exception $e) {
             Log::channel('dish')->debug(
                 'Ошибка при создании блюда, dishGuid = ' . $data['mitm_ID'] . ' message: ' . $e->getMessage()

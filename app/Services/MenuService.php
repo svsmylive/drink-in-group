@@ -39,7 +39,9 @@ class MenuService
                 $category['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $category['mgrp_Name']));
                 $category = $this->categoryRepository->updateOrCreate($categoryGuid, $category);
 
-                if (isset($category['MenuGroupNotes'])) {
+                if (!isset($category['MenuGroupNotes'])) {
+                    $this->categoryRepository->update($category, false);
+                } else {
                     foreach ($category['MenuGroupNotes'] as $groupNote) {
                         if ($groupNote['type_ID'] == config('tillypad.notes_id.group_note_id')) {
                             $this->categoryRepository->update($category, $groupNote['value']);
@@ -50,9 +52,11 @@ class MenuService
                 foreach ($dishes as $dishItem) {
                     $dishItem['mitm_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $dishItem['mitm_Name']));
                     $dish = $this->dishRepository->updateOrCreate($categoryGuid, $dishItem);
+
                     if (!$dish) {
                         continue;
                     }
+
                     if (!isset($dishItem['MenuItemNotes'])) {
                         $this->dishRepository->update($dish, false);
                     } else {
