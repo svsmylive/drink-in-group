@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Institution;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,18 +17,27 @@ class CheckDeliveryTime
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->checkDelivery()) {
+        if (!$this->checkDelivery($request)) {
             return response(["error" => "В данный момент доставка не работает"], 400);
         }
 
         return $next($request);
     }
 
-    private function checkDelivery(): bool
+    private function checkDelivery(Request $request): bool
     {
-        $startDelivery = 12;
-        $endDelivery = 23;
+        $institution = Institution::findOrFail($request->input('institution_id'));
+
+        if ($institution->name == 'КУЛИНАРИЯ') {
+            $startDelivery = 9;
+            $endDelivery = 20;
+        } else {
+            $startDelivery = 12;
+            $endDelivery = 23;
+        }
+
         $now = (int)(now()->format('H'));
+
         if (!($now > $startDelivery && $now < $endDelivery)) {
             return false;
         }

@@ -51,6 +51,7 @@ class Institution extends Model
         'Караоке',
         'Сауна',
         'Бильярдная',
+        'Кулинария',
     ];
 
     private const SAUNA_INCLUDES = [

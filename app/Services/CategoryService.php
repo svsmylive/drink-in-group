@@ -2,23 +2,24 @@
 
 namespace App\Services;
 
-use App\Http\Resources\Category\CategoryCollection;
 use App\Repository\CategoryRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class CategoryService
 {
     /**
      * @param CategoryRepository $categoryRepository
      */
-    public function __construct(private CategoryRepository $categoryRepository){}
+    public function __construct(private CategoryRepository $categoryRepository)
+    {
+    }
 
     /**
-     * @return CategoryCollection
+     * @param array $data
+     * @return Collection
      */
-    public function getList(): CategoryCollection
+    public function getList(array $data): Collection
     {
-        $categories = $this->categoryRepository->getList();
-
-        return new CategoryCollection($categories);
+        return $this->categoryRepository->getList($data);
     }
 }

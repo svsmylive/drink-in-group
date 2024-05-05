@@ -5,18 +5,23 @@ namespace App\Repository;
 use App\Models\Category;
 use Exception;
 
-use Illuminate\Support\Collection;
+
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class CategoryRepository
 {
     /**
+     * @param $data
      * @return Collection
      */
-    public function getList(): Collection
+    public function getList($data): Collection
     {
         return Category::query()
-            ->select(['id', 'name', 'index', 'external_id'])
+            ->with('dishes')
+            ->whereHas('dishes', function ($query) use ($data) {
+                $query->where('institution_id', $data['institution_id']);
+            })
             ->where('is_show', true)
             ->get();
     }

@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $external_id
  * @property int $category_external_id
  * @property bool $is_show
- * @property int $index
+ * @property int $index,
+ * @property int $institution_id,
  *
  * @property Category $category
  */
@@ -33,6 +34,7 @@ class Dish extends Model
         'category_external_id',
         'external_id',
         'is_show',
+        'institution_id',
     ];
 
     /**

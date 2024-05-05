@@ -36,41 +36,29 @@ class MenuService
                     continue;
                 }
 
-                if (stristr($category['mgrp_Name'], '*')) {
-                    $category['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $category['mgrp_Name']));
-                    $category = $this->categoryRepository->updateOrCreate($categoryGuid, $category);
+                $category['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $category['mgrp_Name']));
+                $category = $this->categoryRepository->updateOrCreate($categoryGuid, $category);
 
-                    if (isset($category['MenuGroupNotes'])) {
-                        foreach ($category['MenuGroupNotes'] as $groupNote) {
-                            if ($groupNote['type_ID'] == config('tillypad.notes_id.group_note_id')) {
-                                $this->categoryRepository->update($category, $groupNote['value']);
-                            }
+                if (isset($category['MenuGroupNotes'])) {
+                    foreach ($category['MenuGroupNotes'] as $groupNote) {
+                        if ($groupNote['type_ID'] == config('tillypad.notes_id.group_note_id')) {
+                            $this->categoryRepository->update($category, $groupNote['value']);
                         }
                     }
                 }
 
                 foreach ($dishes as $dishItem) {
-                    if (stristr($dishItem['mitm_Name'], '*')) {
-                        $dishItem['mitm_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $dishItem['mitm_Name']));
-                        $dish = $this->dishRepository->updateOrCreate($categoryGuid, $dishItem);
-                        if (!$dish) {
-                            continue;
-                        }
-                        if (!isset($dishItem['MenuItemNotes'])) {
-                            $this->dishRepository->update($dish, false);
-                        } else {
-                            if (count(
-                                    $dishItem['MenuItemNotes']
-                                ) < 2 && $dishItem['MenuItemNotes'][0]['type_ID'] != config(
-                                    'tillypad.notes_id.menu_note_id'
-                                )) {
-                                $this->dishRepository->update($dish, false);
-                            } else {
-                                foreach ($dishItem['MenuItemNotes'] as $menuNote) {
-                                    if ($menuNote['type_ID'] == config('tillypad.notes_id.menu_note_id')) {
-                                        $this->dishRepository->update($dish, $menuNote['value'] == 'true');
-                                    }
-                                }
+                    $dishItem['mitm_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $dishItem['mitm_Name']));
+                    $dish = $this->dishRepository->updateOrCreate($categoryGuid, $dishItem);
+                    if (!$dish) {
+                        continue;
+                    }
+                    if (!isset($dishItem['MenuItemNotes'])) {
+                        $this->dishRepository->update($dish, false);
+                    } else {
+                        foreach ($dishItem['MenuItemNotes'] as $menuNote) {
+                            if ($menuNote['type_ID'] == config('tillypad.notes_id.menu_note_id')) {
+                                $this->dishRepository->update($dish, $menuNote['value'] == 'true');
                             }
                         }
                     }

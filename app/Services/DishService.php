@@ -2,21 +2,23 @@
 
 namespace App\Services;
 
-use App\Http\Resources\Dish\DishCollection;
 use App\Repository\DishRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class DishService
 {
     /**
      * @param DishRepository $dishRepository
      */
-    public function __construct(private DishRepository $dishRepository){}
+    public function __construct(private readonly DishRepository $dishRepository)
+    {
+    }
 
     /**
-     * @return DishCollection
+     * @return Collection
      */
-    public function getList(): DishCollection
+    public function getList(): Collection
     {
-        return new DishCollection($this->dishRepository->getList());
+        return $this->dishRepository->getList();
     }
 }

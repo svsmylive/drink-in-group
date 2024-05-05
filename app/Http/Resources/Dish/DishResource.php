@@ -2,9 +2,12 @@
 
 namespace App\Http\Resources\Dish;
 
-use App\Models\Category;
+use App\Models\Dish;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Dish $this
+ */
 class DishResource extends JsonResource
 {
     /**
@@ -22,18 +25,7 @@ class DishResource extends JsonResource
                 'price' => $this->price,
                 'preview_image' => $this->preview_image,
                 'detail_image' => $this->detail_image,
-                'category' => $this->formatCategory($this->category),
+                'institution_id' => $this->institution_id,
             ];
-    }
-
-    /**
-     * @param Category $category
-     * @return Category
-     */
-    private function formatCategory(Category $category): Category
-    {
-        $category->setVisible(['id', 'name', 'preview_image']);
-
-        return $category;
     }
 }

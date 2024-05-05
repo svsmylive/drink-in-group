@@ -15,8 +15,11 @@ class OrderService
      * @param PaymentInterface $payment
      * @param TillypadService $tillypadService
      */
-    public function __construct(private OrderRepository $orderRepository, private PaymentInterface $payment, private TillypadService $tillypadService)
-    {
+    public function __construct(
+        private OrderRepository $orderRepository,
+        private PaymentInterface $payment,
+        private TillypadService $tillypadService
+    ) {
     }
 
     /**
@@ -45,13 +48,13 @@ class OrderService
                 $transactionData = $this->payment->createPayment((float)($amount + $deliveryPrice), options: $userInfo);
                 $order->update(['transaction_id' => $transactionData['id']]);
 
-                return getSuccessResponse(['confirmation_token' => $transactionData['token']]);
+                return response()->json(['confirmation_token' => $transactionData['token']]);
             }
             $this->tillypadService->sendOrder((object)$userInfo, $order);
 
-            return getSuccessResponse(['Заказ отправился во внутреннею систему']);
+            return response()->json(['Заказ отправился во внутреннею систему']);
         }
 
-        return getErrors(['Итоговая сумма не равна сумме позиций']);
+        return response()->json(['Итоговая сумма не равна сумме позиций'], 400);
     }
 }

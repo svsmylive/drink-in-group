@@ -28,7 +28,7 @@ class TillypadService
      */
     public function getMenu(): Collection|null
     {
-        $response = $this->client->get(config('tillypad.url') . '/get-menu?sale-property-id=' . config('tillypad.provino_menu'));
+        $response = $this->client->get(config('tillypad.url') . '/get-menu?sale-property-id=AE3DF162-F2C2-4A4D-BE25-1E15AC96B568');
 
         if (!$response) {
             return null;
@@ -50,7 +50,7 @@ class TillypadService
             return null;
         }
 
-        return $response['MenuGroups'][0];
+        return $response['MenuGroups'][0] ?? null;
     }
 
     /**

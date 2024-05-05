@@ -2,10 +2,13 @@
 
 namespace App\Http\Resources\Category;
 
-use App\Models\Dish;
-use Illuminate\Database\Eloquent\Collection;
+use App\Http\Resources\Dish\DishResource;
+use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Category
+ */
 class CategoryResource extends JsonResource
 {
     /**
@@ -21,24 +24,7 @@ class CategoryResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'preview_image' => $this->preview_image,
-                'dishes' => $this->formatDishes($this->dishes)
+                'dishes' => DishResource::collection($this->dishes)
             ];
-    }
-
-    /**
-     * @param Collection $dishes
-     * @return Collection
-     */
-    private function formatDishes(Collection $dishes): Collection
-    {
-        $dishes->each(function (Dish $dish) {
-            $dish->setVisible([
-                'id',
-                'name', 'price',
-                'preview_image',
-            ]);
-        });
-
-        return $dishes;
     }
 }

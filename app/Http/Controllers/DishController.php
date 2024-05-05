@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Dish\DishResource;
 use App\Models\Dish;
 use App\Services\DishService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DishController extends Controller
 {
@@ -17,19 +17,21 @@ class DishController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): AnonymousResourceCollection
     {
-        return getSuccessResponse([$this->dishService->getList()]);
+        $data = $this->dishService->getList();
+
+        return DishResource::collection($data);
     }
 
     /**
      * @param Dish $dish
-     * @return JsonResponse
+     * @return DishResource
      */
-    public function show(Dish $dish): JsonResponse
+    public function show(Dish $dish): DishResource
     {
-        return getSuccessResponse([new DishResource($dish)]);
+        return new DishResource($dish);
     }
 }

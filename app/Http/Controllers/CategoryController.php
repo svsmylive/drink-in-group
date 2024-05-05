@@ -2,32 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
 {
     /**
      * @param CategoryService $categotyService
      */
-    public function __construct(private CategoryService $categotyService){}
+    public function __construct(private readonly CategoryService $categotyService)
+    {
+    }
 
     /**
-     * @return JsonResponse
+     * @param SearchCategoryRequest $request
+     * @return AnonymousResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(SearchCategoryRequest $request): AnonymousResourceCollection
     {
-        return getSuccessResponse([$this->categotyService->getList()]);
+        $data = $this->categotyService->getList($request->validated());
+
+        return CategoryResource::collection($data);
     }
 
     /**
      * @param Category $category
-     * @return JsonResponse
+     * @return CategoryResource
      */
-    public function show(Category $category): JsonResponse
+    public function show(Category $category): CategoryResource
     {
-        return getSuccessResponse([new CategoryResource($category)]);
+        return new CategoryResource($category);
     }
 }
