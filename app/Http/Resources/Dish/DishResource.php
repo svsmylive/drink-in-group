@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Dish;
 
+use App\Http\Resources\Attachments\AttachmentsResource;
 use App\Models\Dish;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,8 +24,9 @@ class DishResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'price' => $this->price,
-                'preview_image' => $this->preview_image,
-                'detail_image' => $this->detail_image,
+                'image' => AttachmentsResource::collection(
+                    $this->whenNotNull($this->image()->exists() ? $this->image()->get() : null)
+                ),
                 'institution_id' => $this->institution_id,
             ];
     }

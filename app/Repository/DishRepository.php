@@ -73,7 +73,7 @@ class DishRepository
     {
         return Dish::query()
             ->select(['id', 'name', 'price', 'index', 'preview_image', 'category_external_id'])
-            ->with('category:id,external_id')
+            ->with('category:id,external_id', 'attachment')
             ->where('is_show', true)
             ->get();
     }

@@ -33,7 +33,8 @@ class DishesEditScreen extends Screen
     {
         $dish->load([
             'category',
-            'institution'
+            'institution',
+            'attachment',
         ]);
 
         return [
@@ -77,6 +78,11 @@ class DishesEditScreen extends Screen
     public function save(Dish $dish, SaveDishRequest $request): RedirectResponse
     {
         $data = $request->validated()['dish'];
+
+        if ($attachment = $data['attachment'] ?? null) {
+            $dish->attachment()->sync($attachment);
+        }
+
         $dish->update($data);
 
         Toast::info(__('Успешно!'));

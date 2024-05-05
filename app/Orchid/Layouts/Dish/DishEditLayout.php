@@ -3,7 +3,10 @@
 namespace App\Orchid\Layouts\Dish;
 
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Picture;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Layouts\Rows;
 
 class DishEditLayout extends Rows
@@ -42,6 +45,10 @@ class DishEditLayout extends Rows
                 ->sendTrueOrFalse()
                 ->placeholder(__('Активность'))
                 ->help('Будет ли блюдо активно'),
+
+            Upload::make('dish.attachment')
+                ->maxFiles(1)
+                ->title('Фото')
         ];
     }
 }

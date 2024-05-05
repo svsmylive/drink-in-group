@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Orchid\Presenters\Dish\DishPresenter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Like;
@@ -16,6 +17,7 @@ use Orchid\Screen\AsSource;
  * @property int $id
  * @property string $name
  * @property string $detail_text
+ * @property string|null $preview_image
  * @property int $price
  * @property int $external_id
  * @property int $category_external_id
@@ -41,6 +43,7 @@ class Dish extends Model
         'external_id',
         'is_show',
         'institution_id',
+        'preview_image',
     ];
 
     protected array $allowedFilters = [
@@ -75,5 +78,10 @@ class Dish extends Model
     public function institution(): BelongsTo
     {
         return $this->belongsTo(Institution::class, 'institution_id', 'id');
+    }
+
+    public function image(): MorphToMany
+    {
+        return $this->morphToMany(Attachment::class, 'attachmentable', 'attachmentable');
     }
 }

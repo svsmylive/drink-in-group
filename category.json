@@ -1,0 +1,33 @@
+{
+    "data": [
+        {
+            "id": 971,
+            "name": "test",
+            "preview_image": null,
+            "dishes": [
+                {
+                    "id": 260,
+                    "name": "пельмени",
+                    "price": 502,
+                    "image": [
+                        {
+                            "id": 24,
+                            "name": "7e50306052c17e6bdf7c2a68f5d5bb2f303f3983",
+                            "original_name": "Снимок экрана 2024-04-11 в 09.28.07.png",
+                            "extension": "png",
+                            "size": 243942,
+                            "url": "/storage/2024/05/05/7e50306052c17e6bdf7c2a68f5d5bb2f303f3983.png"
+                        }
+                    ],
+                    "institution_id": 8
+                },
+                {
+                    "id": 261,
+                    "name": "суп ",
+                    "price": 500,
+                    "institution_id": 8
+                }
+            ]
+        }
+    ]
+}
