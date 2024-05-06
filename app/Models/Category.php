@@ -16,7 +16,7 @@ use Orchid\Screen\AsSource;
 /**
  * @property int $id
  * @property string name
- * @property int $external_id
+ * @property string $external_id
  * @property int $index
  * @property bool $is_show
  *
