@@ -19,6 +19,8 @@ class SaveInstitutionRequest extends FormRequest
         return [
             'institution.name' => ['required', 'string'],
             'institution.type' => ['nullable', 'string'],
+            'institution.has_booking' => ['nullable', 'bool'],
+            'institution.has_delivery' => ['nullable', 'bool'],
             'institution.city' => ['nullable', 'string'],
             'institution.address' => ['nullable', 'string'],
             'institution.full_address' => ['nullable', 'string'],

@@ -14,6 +14,8 @@ class InstitutionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'has_booking' => $this->has_booking,
+            'has_delivery' => $this->has_delivery,
             'name' => $this->name,
             'type' => $this->type,
             'city' => $this->city,

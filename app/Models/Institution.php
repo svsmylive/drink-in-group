@@ -37,6 +37,8 @@ use Orchid\Screen\AsSource;
  * @property string $services_and_prices_price
  * @property array $services_and_prices_include
  * @property array $services_and_prices_additionally_include
+ * @property bool $has_booking
+ * @property bool $has_delivery
  */
 class Institution extends Model
 {
@@ -96,6 +98,8 @@ class Institution extends Model
         'title',
         'description',
         'url',
+        'has_booking',
+        'has_delivery',
     ];
 
     protected $fillable = self::FILLABLE;

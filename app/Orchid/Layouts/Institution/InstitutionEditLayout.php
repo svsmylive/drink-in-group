@@ -32,6 +32,18 @@ class InstitutionEditLayout extends Rows
                 ->options(Institution::getTypes())->title(__('Тип заведения'))
                 ->help('Тип заведения'),
 
+            CheckBox::make('institution.has_booking')
+                ->title(__('Активность кнопки бронирования'))
+                ->sendTrueOrFalse()
+                ->placeholder(__('Активность кнопки бронирования'))
+                ->help('Будет ли в заведении кнопка забронировать активна'),
+
+            CheckBox::make('institution.has_delivery')
+                ->title(__('Активность доставки'))
+                ->sendTrueOrFalse()
+                ->placeholder(__('Активность доставки'))
+                ->help('Активность доставки (если настроена интеграция Tillypad)'),
+
             Input::make('institution.city')
                 ->type('text')
                 ->title(__('Город'))
