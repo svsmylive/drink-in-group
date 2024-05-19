@@ -195,6 +195,8 @@ function activeIndexChange(e: any) {
     window.history.pushState(null, companies.value?.[index]?.seoTitle, `/${route}`);
   }
 }
+
+const isBG = computed(() => currentCompany.value?.id == 1);
 </script>
 
 <template>
@@ -288,7 +290,10 @@ function activeIndexChange(e: any) {
           </template>
           <DText v-else class="d-banner-menu-text" theme="Title">{{ currentCompany?.name }}</DText>
           <hr class="d-company-wrappe__hr" />
-          <template v-if="isActive">
+          <template v-if="isBG">
+            <DText theme="Title-M-Medium" style="text-align: center;white-space: wrap;">Закрыто на реконструкцию</DText>
+          </template>
+          <template v-else-if="isActive">
             <DText
               v-for="(section, index) in currentCompany?.sections"
               :key="index"
