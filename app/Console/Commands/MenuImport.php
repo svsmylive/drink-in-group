@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Institution;
 use App\Services\MenuService;
 use App\Services\TillypadService;
 use GuzzleHttp\Exception\GuzzleException;
@@ -39,10 +40,17 @@ class MenuImport extends Command
      */
     public function handle()
     {
-        $menuCollection = $this->tillypadService->getMenu();
+        $institutions = [
+            Institution::query()->where('type', '=', 'Кулинария')->first(),
+            Institution::query()->where('name', '=', 'КАМЕЛОТ')->first()
+        ];
 
-        if ($menuCollection) {
-            $this->menuService->updateOrCreateFromApi($menuCollection);
+        foreach ($institutions as $institution) {
+            $menuCollection = $this->tillypadService->getMenu($institution);
+
+            if ($menuCollection) {
+                $this->menuService->updateOrCreateFromApi($menuCollection, $institution);
+            }
         }
     }
 }

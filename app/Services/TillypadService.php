@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Dish;
+use App\Models\Institution;
 use App\Models\Order;
 use App\Models\OrderCount;
 use App\Services\Adapter\HttpAdapter;
@@ -23,12 +24,19 @@ class TillypadService
     }
 
     /**
+     * @param Institution $institution
      * @return Collection|null
      * @throws GuzzleException
      */
-    public function getMenu(): Collection|null
+    public function getMenu(Institution $institution): Collection|null
     {
-        $response = $this->client->get(config('tillypad.url') . '/get-menu?sale-property-id=AE3DF162-F2C2-4A4D-BE25-1E15AC96B568');
+        if ($institution->type == 'Кулинария') {
+            $id = 'AE3DF162-F2C2-4A4D-BE25-1E15AC96B568';
+        } else {
+            $id = 'C6405C88-300C-9E40-99AC-D10D64ABBA3C';
+        }
+
+        $response = $this->client->get(config('tillypad.url') . '/get-menu?sale-property-id=' . $id);
 
         if (!$response) {
             return null;

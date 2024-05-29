@@ -15,21 +15,9 @@ class DishRepository
      * @param array $data
      * @return Dish|null
      */
-    public function updateOrCreate(string $categoryGuid, array $data): ?Dish
+    public function updateOrCreate(Institution $institution, string $categoryGuid, array $data): ?Dish
     {
         $dish = null;
-
-        if (!isset($data['mitm_msrv_ID'])) {
-            return $dish;
-        }
-
-        if ($data['mitm_msrv_ID'] == '51948292-599A-A24C-BFA8-67870F8F40B4') {
-            $institution = Institution::query()->where('type', '=', 'Кулинария')->first();
-        } elseif ($data['mitm_msrv_ID'] == '') {
-            $institution = Institution::query()->where('name', '=', 'КАМЕЛОТ')->first();
-        } else {
-            return $dish;
-        }
 
         try {
             /**@var Dish $dish */
