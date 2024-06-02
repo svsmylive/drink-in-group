@@ -64,19 +64,18 @@ class TillypadService
     /**
      * @param object $data
      * @param Order $order
-     * @param bool $isOnlinePayment
      * @return void
      * @throws GuzzleException
      */
-    public function sendOrder(object $data, Order $order, bool $isOnlinePayment = false): void
+    public function sendOrder(object $data, Order $order): void
     {
         if (isset($data->firstName, $data->phone, $data->address)) {
-            $preparedOrder = $this->prepareOrder($data, $order, $isOnlinePayment);
+            $preparedOrder = $this->prepareOrder($data, $order);
             $response = Http::post(config('tillypad.url') . '/post-guest', $preparedOrder);
 
             Log::info('order gest_ID', [$response]);
         }
-        /*if ($isOnlinePayment && isset($response['gest_ID'])) {
+        /*if (isset($response['gest_ID'])) {
             $guestID = $response['gest_ID'];
             $this->createPayment($order, $guestID);
         }*/
@@ -85,14 +84,13 @@ class TillypadService
     /**
      * @param object $data
      * @param Order $order
-     * @param bool $isOnlinePayment
      * @return array
      * @throws GuzzleException
      */
-    public function prepareOrder(object &$data, Order $order, bool $isOnlinePayment): array
+    public function prepareOrder(object &$data, Order $order): array
     {
         /**@var OrderCount $orderCount */
-        $orderCount = OrderCount::first();
+        $orderCount = OrderCount::where('institution_id', $order->institution_id)->first();
         $typeOfDelivery = $data->typeOfDelivery;
         $phone = $data->phone;
         $firstName = $data->firstName;
@@ -100,7 +98,7 @@ class TillypadService
         $secondName = $data->secondName ?? '';
         $email = $data->email ?? '';
         $comment = $data->comment ?? '';
-        if ($isOnlinePayment && $data->comment) {
+        if ($data->comment) {
             $comment .= "\n ОПЛАЧЕН НА САЙТЕ";
         }
         $dateOrder = Carbon::now()->format('Y-m-d\TH:i:s');
@@ -127,17 +125,21 @@ class TillypadService
             ];
         }
         $prepareData = [
-            'gest_gsst_ID' => 3, //статус подготовка
+            'gest_gsst_ID' => 3,
+            //статус подготовка
             'gest_Comment' => $comment,
             'gest_DateOpen' => $dateOrder,
-            'gest_dvsn_ID' => '88971A81-082C-9143-9905-A0BC07FF2F21',    //боевое подразделение
+            'gest_dvsn_ID' => '88971A81-082C-9143-9905-A0BC07FF2F21',
+            //боевое подразделение cвое для камелота, кулинарии
 //            'gest_dvsn_ID' => 'C21850A8-238E-B947-B9D0-CAF27739EDB1',
             'gest_ClientPhone' => $phone,
             'gest_Name' => 'DS' . $orderCount->count,
+            // cвое для камелота, кулинарии
             'gest_ClientAddress' => $address,
             'gest_ClientName' => $firstName,
             'gest_IsDelivery' => 1,
             'guestDeliveries' => [
+                'gsdlv_pytp_ID_Prepaid' => '',
                 "gsdlv_dlvrst_ID" => 2,
                 "gsdlv_dlvrmt_ID" => $typeOfDelivery,
                 "gsdlv_cncpt_ID" => "E0434286-6DA2-7F47-814D-21F72151539F",
@@ -149,9 +151,8 @@ class TillypadService
                 $orders
             ]
         ];
-        if ($isOnlinePayment) {
-            $prepareData['guestDeliveries']['gsdlv_pytp_ID_Prepaid'] = '1A282341-6C84-6349-A211-8B2C651D3A34';
-        }
+        $prepareData['guestDeliveries']['gsdlv_pytp_ID_Prepaid'] = '1A282341-6C84-6349-A211-8B2C651D3A34';
+
         $orderCount->update(['count' => ++$orderCount->count]);
 
         return $prepareData;

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Services\PaymentInterface;
 use App\Models\Dish;
+use App\Models\Institution;
 use App\Repository\OrderRepository;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -32,10 +33,10 @@ class OrderService
         $order = data_get($data, 'order');
         $amount = data_get($data, 'amount');
         $deliveryPrice = data_get($data, 'delivery');
-        $isOnlinePayment = data_get($data, 'online');
         $userInfo = data_get($data, 'userInfo');
         $userInfo['typeOfDelivery'] = data_get($data, 'typeOfDelivery');
         $totalCost = 0;
+        $institution = Institution::find($data['institution_id']);
 
         foreach ($order as $id => $orderData) {
             $dish = Dish::find($id);
@@ -43,16 +44,11 @@ class OrderService
         }
 
         if ($totalCost === $amount) {
-            $order = $this->orderRepository->create($order, $amount);
-            if ($isOnlinePayment) {
-                $transactionData = $this->payment->createPayment((float)($amount + $deliveryPrice), options: $userInfo);
-                $order->update(['transaction_id' => $transactionData['id']]);
+            $order = $this->orderRepository->create($order, $amount, $institution);
+            $transactionData = $this->payment->createPayment((float)($amount + $deliveryPrice), options: $userInfo);
+            $order->update(['transaction_id' => $transactionData['id']]);
 
-                return response()->json(['confirmation_token' => $transactionData['token']]);
-            }
-            $this->tillypadService->sendOrder((object)$userInfo, $order);
-
-            return response()->json(['Заказ отправился во внутреннею систему']);
+            return response()->json(['confirmation_token' => $transactionData['token']]);
         }
 
         return response()->json(['Итоговая сумма не равна сумме позиций'], 400);

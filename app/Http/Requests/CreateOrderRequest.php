@@ -42,8 +42,8 @@ class CreateOrderRequest extends FormRequest
             'userInfo.phone' => 'required|min:16|max:16',
             'userInfo.comment' => 'nullable|string|max:255',
             'userInfo.email' => 'nullable|email:rfc,dns',
-            'online' => 'required|bool',
             'typeOfDelivery' => 'required|min:1|max:2',
+            'institution_id' => ['required', 'exists:institutions,id'],
         ];
     }
 
@@ -58,7 +58,6 @@ class CreateOrderRequest extends FormRequest
             'order.required' => 'Поле order обязательное',
             'amount.required' => 'Поле amount обязательное',
             'delivery.required' => 'Поле delivery обязательное',
-            'online.required' => 'Поле online обязательное',
             'typeOfDelivery.required' => 'Поле typeOfDelivery обязательное',
             'userInfo.required' => 'Поле userInfo обязательное',
         ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
@@ -12,6 +13,7 @@ class Order extends Model
         'info',
         'transaction_id',
         'amount',
+        'institution_id',
     ];
 
     /**
@@ -23,5 +25,10 @@ class Order extends Model
         return Order::query()
             ->where('transaction_id', $transactionId)
             ->first();
+    }
+
+    public function institution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class, 'institution_id');
     }
 }

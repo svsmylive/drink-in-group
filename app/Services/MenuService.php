@@ -50,7 +50,7 @@ class MenuService
                 } else {
                     foreach ($category['MenuGroupNotes'] as $groupNote) {
                         if ($groupNote['type_ID'] == config('tillypad.notes_id.group_note_id')) {
-                            $this->categoryRepository->update($category, $groupNote['value']);
+                            $this->categoryRepository->update($category, $groupNote['value'] == 'true');
                         }
                     }
                 }
@@ -76,5 +76,4 @@ class MenuService
             }
         }
     }
-
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class DishRepository
 {
     /**
+     * @param Institution $institution
      * @param string $categoryGuid
      * @param array $data
      * @return Dish|null
