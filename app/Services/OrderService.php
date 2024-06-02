@@ -14,12 +14,10 @@ class OrderService
     /**
      * @param OrderRepository $orderRepository
      * @param PaymentInterface $payment
-     * @param TillypadService $tillypadService
      */
     public function __construct(
-        private OrderRepository $orderRepository,
-        private PaymentInterface $payment,
-        private TillypadService $tillypadService
+        private readonly OrderRepository $orderRepository,
+        private readonly PaymentInterface $payment,
     ) {
     }
 
@@ -38,8 +36,8 @@ class OrderService
         $totalCost = 0;
         $institution = Institution::find($data['institution_id']);
 
-        foreach ($order as $id => $orderData) {
-            $dish = Dish::find($id);
+        foreach ($order as $orderData) {
+            $dish = Dish::find($orderData['id']);
             $totalCost += $dish?->price * $orderData['count'];
         }
 

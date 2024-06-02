@@ -32,7 +32,8 @@ class CreateOrderRequest extends FormRequest
     {
         return [
             'order' => 'required|array',
-            'order.*.count' => 'required|integer',
+            'order.*.id' => ['required', 'integer'],
+            'order.*.count' => ['required', 'integer'],
             'amount' => 'required|integer',
             'delivery' => 'required|integer|min:0|max:400',
             'userInfo' => 'required|array',
