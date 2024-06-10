@@ -112,7 +112,7 @@ class YookassaService implements PaymentInterface
                     if (!$order) {
                         Log::info('По транзакции не возможно найти заказ', [$payment]);
                     } else {
-                        $this->tillypadService->sendOrder($metadata, $order);
+//                        $this->tillypadService->sendOrder($metadata, $order);
                     }
                 }
             }
