@@ -32,23 +32,23 @@ class MenuService
     {
         foreach (collect($menuCollection['MenuItems'])->groupBy('mitm_mgrp_ID')->chunk(300) as $menu) {
             foreach ($menu as $categoryGuid => $dishes) {
-                $category = $this->tillypadService->getCategory($categoryGuid);
+                $categoryData = $this->tillypadService->getCategory($categoryGuid);
+
+                if (!$categoryData) {
+                    continue;
+                }
+
+                $categoryData['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $categoryData['mgrp_Name']));
+                $category = $this->categoryRepository->updateOrCreate($categoryGuid, $categoryData);
 
                 if (!$category) {
                     continue;
                 }
 
-                $category['mgrp_Name'] = trim(str_replace(['*', 'PV', 'V'], '', $category['mgrp_Name']));
-                $category = $this->categoryRepository->updateOrCreate($categoryGuid, $category);
-
-                if (!$category) {
-                    continue;
-                }
-
-                if (!isset($category['MenuGroupNotes'])) {
+                if (!isset($categoryData['MenuGroupNotes'])) {
                     $this->categoryRepository->update($category, false);
                 } else {
-                    foreach ($category['MenuGroupNotes'] as $groupNote) {
+                    foreach ($categoryData['MenuGroupNotes'] as $groupNote) {
                         if ($groupNote['type_ID'] == config('tillypad.notes_id.group_note_id')) {
                             $this->categoryRepository->update($category, $groupNote['value'] == 'true');
                         }

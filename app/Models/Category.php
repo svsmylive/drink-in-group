@@ -62,6 +62,7 @@ class Category extends Model
     public function dishes(): HasMany
     {
         return $this->hasMany(Dish::class, 'category_external_id', 'external_id')
-            ->where('is_show', true);
+            ->where('is_show', true)
+            ->where('price', '>', 0);
     }
 }
