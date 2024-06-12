@@ -38,7 +38,7 @@ class CheckDeliveryTime
 
         $now = (int)(now()->format('H'));
 
-        if (!($now > $startDelivery && $now < $endDelivery)) {
+        if (!($now > $startDelivery || $now < $endDelivery)) {
             return false;
         }
 
