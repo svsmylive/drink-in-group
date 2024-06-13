@@ -17,7 +17,8 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: {
         lang: 'ru'
-      }
+      },
+      script: [{ src: 'https://yookassa.ru/checkout-widget/v1/checkout-widget.js'}]
     }
   },
   hooks: {

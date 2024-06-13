@@ -25,6 +25,9 @@
     "nuxt-icons": "3.2.1",
     "nuxt-swiper": "1.2.2",
     "sass": "1.69.5",
+    "vue-3-mask": "^0.0.1-alpha",
+    "vue-dadata": "^3.0.0-beta.13",
+    "vue3-toastify": "^0.2.1",
     "yandex-metrika-module-nuxt3": "1.5.3"
   }
 }

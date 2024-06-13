@@ -54,7 +54,7 @@ const backgroundImage = computed(() => {
 });
 
 async function updateBackground(image?: any) {
-  if (image == undefined || currentBackground.value == image) {
+  if (image === undefined || currentBackground.value === image) {
     return;
   }
 
@@ -90,7 +90,11 @@ function getSectionTitle(type?: string) {
 
 function action(section?: any) {
   switch (section?.type) {
+    case 'catalog':
+      currentSection.value = 'catalog';
+      break;
     case 'menu':
+      currentSection.value = 'menu';
       downloadFile(section?.link, `${currentCompany.value?.name}`);
       break;
     case 'about':
@@ -116,7 +120,7 @@ onMounted(() => {
 })
 
 watch(currentSection, () => {
-  isLocked.value = currentSection.value != 'none';
+  isLocked.value = currentSection.value !== 'none';
 })
 
 watch(currentCompany, () => {
@@ -197,6 +201,14 @@ function activeIndexChange(e: any) {
 }
 
 const isBG = computed(() => currentCompany.value?.id == 1);
+
+const basket = ref([])
+const setBasket = (data) => {
+  basket.value = data
+  currentSection.value = 'basket'
+
+  console.log(data, currentSection.value)
+}
 </script>
 
 <template>
@@ -211,27 +223,32 @@ const isBG = computed(() => currentCompany.value?.id == 1);
   <Title>{{ currentCompany?.seoTitle ?? 'Сеть ресторанов DRINK IN GROUP' }}</Title>
   <Meta name="description" :content="currentCompany?.seoDescription ?? ''" />
 </Head>
-
 <DPopupReserve
   v-if="currentSection == 'reserve'"
   :company="currentCompany"
   @close="currentSection = 'none'"
 />
-
+<DPopupMenu
+    v-if="currentSection === 'catalog'"
+    :company="currentCompany"
+    @basket="setBasket"
+    @close="currentSection = 'none'" />
+<DPopupBasket
+    v-if="currentSection === 'basket'"
+    :company="currentCompany"
+    :basket="basket"
+    @close="currentSection = 'none'" />
 <DPopupAbout
-  v-if="currentSection == 'about'"
+  v-if="currentSection === 'about'"
   :company="currentCompany"
-  @close="currentSection = 'none'"
-/>
-
+  @close="currentSection = 'none'"/>
 <DPopupEvents
-  v-if="currentSection == 'events'"
+  v-if="currentSection === 'events'"
   :company="currentCompany"
   @close="currentSection = 'none'"
 />
-
 <DPopupSauna
-  v-if="currentSection == 'sauna'"
+  v-if="currentSection === 'sauna'"
   :company="currentCompany"
   @close="currentSection = 'none'"
 />
@@ -294,6 +311,15 @@ const isBG = computed(() => currentCompany.value?.id == 1);
             <DText theme="Title-M-Medium" style="text-align: center;white-space: wrap;">Закрыто на реконструкцию</DText>
           </template>
           <template v-else-if="isActive">
+            <DText
+                v-if="[4, 9].includes(currentCompany.id)"
+                theme="Title-M-Medium"
+                clickable
+                :style="{ marginBottom: containerGap }"
+                @click="action({ type: 'catalog' })"
+            >
+              Доставка
+            </DText>
             <DText
               v-for="(section, index) in currentCompany?.sections"
               :key="index"

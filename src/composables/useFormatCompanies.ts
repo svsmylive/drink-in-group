@@ -9,15 +9,14 @@ export const useFormatCompanies = () => {
   function getSections(data: any) {
     const sections = [];
 
-    if (data?.menu != undefined) {
+    if (data?.menu) {
       sections.push({
         type: 'menu',
         background: formatCompanyUrl(data?.background_images?.menu?.url),
         link: formatCompanyUrl(data?.menu?.url),
       });
     }
-
-    if (data?.about != undefined) {
+    if (data?.about) {
       const { about } = data;
       sections.push({
         type: 'about',
@@ -28,8 +27,7 @@ export const useFormatCompanies = () => {
         images: about.images?.map((image: any) => formatCompanyUrl(image?.url)),
       });
     }
-
-    if (data?.sauna_services_and_prices != undefined) {
+    if (data?.sauna_services_and_prices) {
       const sauna = data.sauna_services_and_prices;
       sections.push({
         type: 'sauna',
@@ -43,8 +41,7 @@ export const useFormatCompanies = () => {
         image: formatCompanyUrl(sauna.image?.url),
       });
     }
-
-    if (data?.event != undefined && data?.event?.image?.length > 0) {
+    if (data?.event && data?.event?.image?.length > 0) {
       const { event } = data;
       sections.push({
         type: 'events',
@@ -60,8 +57,7 @@ export const useFormatCompanies = () => {
         })),
       });
     }
-
-    if (data?.name?.toLowerCase() != 'вино и море') {
+    if (data?.name?.toLowerCase() !== 'вино и море') {
       sections.push({
         type: 'reserve',
         background: formatCompanyUrl(data?.background_images?.reserve?.url),
@@ -77,7 +73,6 @@ export const useFormatCompanies = () => {
 
   function getMobileSlider(data: any) {
     const slider = data?.slider_images_mobile?.length > 0 ? data.slider_images_mobile : data?.slider_images_desktop;
-
     return slider?.map((image: any) => formatCompanyUrl(image?.url)) ?? [];
   }
 
@@ -85,7 +80,6 @@ export const useFormatCompanies = () => {
     if (data == undefined || !Array.isArray(data) || data.length === 0) {
       return [];
     }
-
     return data.map((item) => ({
       id: item?.id ?? 0,
       isActive: item?.active ?? false,
