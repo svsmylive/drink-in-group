@@ -15,7 +15,7 @@ class CheckDeliveryTime
      * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closhttps://gitlab.com/smorygo/statm/-/merge_requests/491#2a35721eeb4aa43cc8562d8323cca1753be04cc3ure $next)
+    public function handle(Request $request, Closure $next)
     {
         if (!$this->checkDelivery($request)) {
             return response(["error" => "В данный момент доставка не работает"], 400);
