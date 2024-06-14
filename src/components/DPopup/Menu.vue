@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { register } from 'swiper/element/bundle'
-  import { ref, onMounted } from '@vue/runtime-core'
+  import { ref, onMounted } from 'vue'
   import { toast } from 'vue3-toastify'
   import 'vue3-toastify/dist/index.css'
   register()

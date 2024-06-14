@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { register } from 'swiper/element/bundle'
-  import { ref, onMounted, watch } from '@vue/runtime-core'
+  import { ref, onMounted, watch } from 'vue'
   import MaskInput from '@/components/Mask/MaskInput.vue'
   import { VueDadata } from 'vue-dadata'
   import 'vue-dadata/dist/style.css'
