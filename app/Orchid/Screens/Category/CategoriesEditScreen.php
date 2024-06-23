@@ -27,6 +27,8 @@ class CategoriesEditScreen extends Screen
      */
     public function query(Category $category): iterable
     {
+        $category->load('dishes.institution');
+
         return [
             'category' => $category
         ];

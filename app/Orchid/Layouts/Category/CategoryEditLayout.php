@@ -11,6 +11,13 @@ class CategoryEditLayout extends Rows
     protected function fields(): iterable
     {
         return [
+            Input::make('category.dishes.1.institution.name')
+                ->readonly()
+                ->type('text')
+                ->style('background:white; color:black')
+                ->title(__('Заведение'))
+                ->placeholder(__('Заведение')),
+
             Input::make('category.name')
                 ->type('text')
                 ->required()
