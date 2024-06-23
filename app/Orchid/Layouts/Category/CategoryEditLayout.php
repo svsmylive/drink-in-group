@@ -22,6 +22,11 @@ class CategoryEditLayout extends Rows
                 ->sendTrueOrFalse()
                 ->placeholder(__('Активность'))
                 ->help('Будет ли категория активна'),
+
+            Input::make('category.index')
+                ->type('number')
+                ->title('Сортировка на странице, чем ниже значение, тем приоритетнее вывод')
+                ->placeholder('Порядок вывода категории на странице')
         ];
     }
 }

@@ -11,6 +11,7 @@ class SaveCategoryRequest extends FormRequest
         return [
             'category.name' => ['required', 'string'],
             'category.is_show' => ['required', 'boolean'],
+            'category.index' => ['required', 'integer'],
         ];
     }
 

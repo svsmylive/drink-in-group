@@ -17,17 +17,23 @@ class CheckDeliveryTime
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->checkDelivery($request)) {
-            return response(["error" => "В данный момент доставка не работает"], 400);
+        $institution = Institution::findOrFail($request->input('institution_id'));
+
+        if (!$this->checkDelivery($institution)) {
+            if ($institution->name == 'КУЛИНАРИЯ') {
+                $msg = 'Доставка работает с 09:00 до 20:00, будем рады видеть вас в следующий раз!';
+            } else {
+                $msg = 'Доставка работает с 12:00 до 23:00, будем рады видеть вас в следующий раз!';
+            }
+
+            return response(["error" => $msg], 400);
         }
 
         return $next($request);
     }
 
-    private function checkDelivery(Request $request): bool
+    private function checkDelivery(Institution $institution): bool
     {
-        $institution = Institution::findOrFail($request->input('institution_id'));
-
         if ($institution->name == 'КУЛИНАРИЯ') {
             $startDelivery = 9;
             $endDelivery = 20;
@@ -38,7 +44,7 @@ class CheckDeliveryTime
 
         $now = (int)(now()->format('H'));
 
-        if (!($now > $startDelivery || $now < $endDelivery)) {
+        if ($now < $startDelivery || $now > $endDelivery) {
             return false;
         }
 

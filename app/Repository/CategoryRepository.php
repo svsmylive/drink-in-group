@@ -23,6 +23,7 @@ class CategoryRepository
                 $query->where('institution_id', $data['institution_id']);
             })
             ->where('is_show', true)
+            ->orderBy('index')
             ->get();
     }
 
