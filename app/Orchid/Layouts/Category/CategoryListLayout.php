@@ -32,7 +32,9 @@ class CategoryListLayout extends Table
             TD::make('dishes.institution.name', 'Заведение')
 //                ->sort('institution_name')
                 ->render(function (Category $category) {
-                    return $category->dishes->first()?->institution->name ?? '';
+                    $institution = $category->dishes->first()?->institution ?? null;
+
+                    return $institution ? $institution->type . ' ' . $institution->name : '';
                 }),
 
             TD::make('name', __('Название'))

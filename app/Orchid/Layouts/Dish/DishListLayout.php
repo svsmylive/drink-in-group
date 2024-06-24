@@ -31,7 +31,13 @@ class DishListLayout extends Table
         return [
             TD::make('category.name', __('Категория')),
 
-            TD::make('institution.name', __('Заведение')),
+            TD::make('dishes.institution.name', 'Заведение')
+//                ->sort('institution_name')
+                ->render(function (Dish $dish) {
+                    $institution = $dish->institution ?? null;
+
+                    return $institution ? $institution->type . ' ' . $institution->name : '';
+                }),
 
             TD::make('name', __('Название'))
                 ->sort()
