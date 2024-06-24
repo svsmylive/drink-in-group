@@ -29,6 +29,12 @@ class CategoryListLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make('dishes.institution.name', 'Заведение')
+//                ->sort('institution_name')
+                ->render(function (Category $category) {
+                    return $category->dishes->first()?->institution->name ?? '';
+                }),
+
             TD::make('name', __('Название'))
                 ->sort()
                 ->cantHide()

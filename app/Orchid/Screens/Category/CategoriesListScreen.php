@@ -18,7 +18,7 @@ class CategoriesListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => Category::filters()->defaultSort('name')->paginate()
+            'categories' => Category::with('dishes.institution')->filters()->defaultSort('name')->paginate(100)
         ];
     }
 
