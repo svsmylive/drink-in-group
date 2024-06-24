@@ -18,7 +18,9 @@ class DishesListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'dishes' => Dish::filters()->defaultSort('name')->with('category', 'institution')->paginate(100)
+            'dishes' => Dish::filters()->defaultSort('name')->with('category', 'institution')->whereHas('category', function ($query) {
+                $query->where('is_show', true);
+            })->paginate(100)
         ];
     }
 
