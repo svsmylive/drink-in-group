@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Contracts\Services\PaymentInterface;
 use App\Models\Dish;
 use App\Models\Institution;
+use App\Models\Order;
 use App\Repository\OrderRepository;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 
 class OrderService
 {
@@ -46,9 +48,52 @@ class OrderService
             $transactionData = $this->payment->createPayment((float)($amount + $deliveryPrice), options: $userInfo);
             $order->update(['transaction_id' => $transactionData['id']]);
 
+            $this->sendTelegram($order, $userInfo);
+
             return response()->json(['confirmation_token' => $transactionData['token']]);
         }
 
         return response()->json(['Итоговая сумма не равна сумме позиций'], 400);
+    }
+
+    public function sendTelegram(Order $order, array $userInfo): void
+    {
+        $apiKey = config('telegram.api_key');
+        $chatId = config('telegram.chat_id_krasnodar');
+
+        $message = $this->getTelegramMessage($order, $userInfo);
+
+        // в группу drink in group krd
+        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+            'chat_id' => '-4281880650',
+            'text' => $message,
+        ]);
+
+        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+            'chat_id' => $chatId,
+            'text' => $message,
+        ]);
+    }
+
+    private function getTelegramMessage(Order $order, array $userInfo): string
+    {
+        $order->loadMissing('institution');
+        $data = [
+            'institution_name' => $order->institution->name,
+            'institution_type' => $order->institution->type,
+            'delivery_type' => $userInfo['typeOfDelivery'] == 1 ? 'Доставка' : 'Самовывоз',
+            'firstName' => $userInfo['firstName'],
+            'phone' => $userInfo['phone'],
+            'amount' => $order->amount,
+        ];
+
+        $messageOut = 'Заказ с сайта' . "\n";
+        $messageOut .= 'Заведение : ' . $data['institution_type'] . ' - ' . $data['institution_name'] . "\n";
+        $messageOut .= 'Тип : ' . $data['delivery_type'] . "\n";
+        $messageOut .= 'Имя клиента : ' . $data['firstName'] . "\n";
+        $messageOut .= 'Телефон : ' . $data['phone'] . "\n";
+        $messageOut .= 'Сумма : ' . $data['amount'] . "\n";
+
+        return $messageOut;
     }
 }
