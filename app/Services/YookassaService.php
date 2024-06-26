@@ -25,10 +25,8 @@ class YookassaService implements PaymentInterface
      * @param TillypadService $tillypadService
      */
     public function __construct(
-        private readonly TillypadService $tillypadService,
-        private readonly OrderService $orderService,
-    )
-    {
+        private readonly TillypadService $tillypadService
+    ) {
     }
 
     /**
@@ -116,7 +114,7 @@ class YookassaService implements PaymentInterface
                         Log::info('По транзакции не возможно найти заказ', [$payment]);
                     } else {
 //                        $this->tillypadService->sendOrder($metaData, $order);
-                        $this->orderService->sendTelegram($metaData, $order);
+                        resolve(OrderService::class)->sendTelegram($metaData, $order);
                     }
                 }
             }
