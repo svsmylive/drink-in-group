@@ -48,20 +48,18 @@ class OrderService
             $transactionData = $this->payment->createPayment((float)($amount + $deliveryPrice), options: $userInfo);
             $order->update(['transaction_id' => $transactionData['id']]);
 
-            $this->sendTelegram($order, $userInfo);
-
             return response()->json(['confirmation_token' => $transactionData['token']]);
         }
 
         return response()->json(['Итоговая сумма не равна сумме позиций'], 400);
     }
 
-    public function sendTelegram(Order $order, array $userInfo): void
+    public function sendTelegram(object $metaData, Order $order): void
     {
         $apiKey = config('telegram.api_key');
         $chatId = config('telegram.chat_id_krasnodar');
 
-        $message = $this->getTelegramMessage($order, $userInfo);
+        $message = $this->getTelegramMessage($order, $metaData);
 
         // в группу drink in group krd
         Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
@@ -75,15 +73,16 @@ class OrderService
         ]);
     }
 
-    private function getTelegramMessage(Order $order, array $userInfo): string
+    private function getTelegramMessage(Order $order, object $metaData): string
     {
         $order->loadMissing('institution');
         $data = [
             'institution_name' => $order->institution->name,
             'institution_type' => $order->institution->type,
-            'delivery_type' => $userInfo['typeOfDelivery'] == 1 ? 'Доставка' : 'Самовывоз',
-            'firstName' => $userInfo['firstName'],
-            'phone' => $userInfo['phone'],
+            'delivery_type' => $metaData->typeOfDelivery == 1 ? 'Доставка' : 'Самовывоз',
+            'firstName' => $metaData->firstName,
+            'phone' => $metaData->phone,
+            'address' => $metaData->address ?? '',
             'amount' => $order->amount,
         ];
 
@@ -93,6 +92,9 @@ class OrderService
         $messageOut .= 'Имя клиента : ' . $data['firstName'] . "\n";
         $messageOut .= 'Телефон : ' . $data['phone'] . "\n";
         $messageOut .= 'Сумма : ' . $data['amount'] . "\n";
+        if ($metaData->typeOfDelivery == 1) {
+            $messageOut .= 'Адрес : ' . $data['address'] . "\n";
+        }
 
         return $messageOut;
     }

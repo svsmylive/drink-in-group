@@ -69,7 +69,7 @@ class TillypadService
      */
     public function sendOrder(object $data, Order $order): void
     {
-        if (isset($data->firstName, $data->phone, $data->address)) {
+        if (isset($data->firstName, $data->phone)) {
             $preparedOrder = $this->prepareOrder($data, $order);
             $response = Http::post(config('tillypad.url') . '/post-guest', $preparedOrder);
 
@@ -94,7 +94,7 @@ class TillypadService
         $typeOfDelivery = $data->typeOfDelivery;
         $phone = $data->phone;
         $firstName = $data->firstName;
-        $address = $data->address;
+        $address = $data->address ?? '';
         $secondName = $data->secondName ?? '';
         $email = $data->email ?? '';
         $comment = $data->comment ?? '';
