@@ -20,7 +20,7 @@ class CheckDeliveryTime
         $institution = Institution::findOrFail($request->input('institution_id'));
 
         if (!$this->checkDelivery($institution)) {
-            if ($institution->type == 'КУЛИНАРИЯ') {
+            if ($institution->type == 'Кулинария') {
                 $msg = 'Доставка работает с 09:00 до 20:00, будем рады видеть вас в следующий раз!';
             } else {
                 $msg = 'Доставка работает с 12:00 до 23:00, будем рады видеть вас в следующий раз!';
