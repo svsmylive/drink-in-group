@@ -34,7 +34,7 @@ class CheckDeliveryTime
 
     private function checkDelivery(Institution $institution): bool
     {
-        if ($institution->name == 'КУЛИНАРИЯ') {
+        if ($institution->type == 'Кулинария') {
             $startDelivery = 9;
             $endDelivery = 20;
         } else {
