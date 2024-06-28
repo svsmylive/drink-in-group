@@ -39,7 +39,7 @@ class CreateOrderRequest extends FormRequest
             'userInfo' => 'required|array',
             'userInfo.firstName' => 'required|string',
             'userInfo.secondName' => 'nullable|string',
-            'userInfo.address' => ['required_if:typeOfDelivery,1', 'string'],
+            'userInfo.address' => ['nullable', 'string'],
             'userInfo.phone' => 'required|min:16|max:16',
             'userInfo.comment' => 'nullable|string|max:255',
             'userInfo.email' => 'nullable|email:rfc,dns',
