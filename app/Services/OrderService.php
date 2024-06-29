@@ -105,7 +105,7 @@ class OrderService
         $messageOut = 'Заказ с сайта' . "\n";
         $messageOut .= 'Заведение : ' . $data['institution_type'] . ' - ' . $data['institution_name'] . "\n";
         $messageOut .= 'Тип : ' . $data['delivery_type'] . "\n";
-        $messageOut .= 'Имя клиента : ' . $data['secondName'] . $data['firstName'] . "\n";
+        $messageOut .= 'Имя клиента : ' . $data['secondName'] . ' ' . $data['firstName'] . "\n";
         $messageOut .= 'Телефон : ' . $data['phone'] . "\n";
 
         if (!empty($data['email'])) {
