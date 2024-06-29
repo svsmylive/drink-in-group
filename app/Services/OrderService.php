@@ -38,6 +38,10 @@ class OrderService
         $totalCost = 0;
         $institution = Institution::find($data['institution_id']);
 
+        if ($userInfo['typeOfDelivery'] == 1 && $deliveryPrice == 0) {
+            return response()->json(['error' => 'Укажите адрес доставки, используя выпадающий список'], 400);
+        }
+
         foreach ($order as $orderData) {
             $dish = Dish::find($orderData['id']);
             $totalCost += $dish?->price * $orderData['count'];
