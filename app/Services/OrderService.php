@@ -39,7 +39,7 @@ class OrderService
         $institution = Institution::find($data['institution_id']);
 
         if ($userInfo['typeOfDelivery'] == 1 && $deliveryPrice == 0) {
-            return response()->json(['error' => 'Укажите адрес доставки, используя выпадающий список'], 400);
+            return response()->json(['error' => "По вашему адресу не смогли рассчитать стоимость доставки, попробуйте выбрать адрес из выпадающего списка"], 400);
         }
 
         foreach ($order as $orderData) {
