@@ -19,7 +19,7 @@ class CheckDeliveryTime
     {
         $institution = Institution::findOrFail($request->input('institution_id'));
 
-        if ($this->checkDelivery($institution)) {
+        if (!$this->checkDelivery($institution)) {
             if ($institution->type == 'Кулинария') {
                 $msg = 'Доставка работает с 09:00 до 20:00, будем рады видеть вас в следующий раз!';
             } else {
@@ -42,9 +42,10 @@ class CheckDeliveryTime
             $endDelivery = 23;
         }
 
-        $now = (int)(now()->format('H'));
+        $nowHour = (int)(now()->format('H'));
+        $nowMinutes = (int)(now()->format('i'));
 
-        if ($now < $startDelivery || $now > $endDelivery) {
+        if (($nowHour <= $startDelivery || $nowHour >= $endDelivery) && $nowMinutes > 0) {
             return false;
         }
 
