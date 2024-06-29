@@ -15,9 +15,9 @@ use YooKassa\Common\Exceptions\NotFoundException;
 use YooKassa\Common\Exceptions\ResponseProcessingException;
 use YooKassa\Common\Exceptions\TooManyRequestsException;
 use YooKassa\Common\Exceptions\UnauthorizedException;
+use YooKassa\Model\Notification\NotificationEventType;
 use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
-use YooKassa\Model\Payment\PaymentStatus;
 
 class YookassaService implements PaymentInterface
 {
@@ -94,7 +94,7 @@ class YookassaService implements PaymentInterface
      */
     public function callback(array $data): void
     {
-        $notification = (isset($data['event']) && $data['event'] === PaymentStatus::SUCCEEDED)
+        $notification = (isset($data['event']) && $data['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
             ? new NotificationSucceeded($data)
             : new NotificationWaitingForCapture($data);
         $payment = $notification->getObject();
