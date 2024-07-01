@@ -24,6 +24,7 @@ use Orchid\Screen\AsSource;
  * @property bool $is_show
  * @property int $index,
  * @property int $institution_id,
+ * @property float|null $mitm_Volume - вес товара в кг
  *
  * @property Category $category
  */
@@ -44,6 +45,7 @@ class Dish extends Model
         'is_show',
         'institution_id',
         'preview_image',
+        'mitm_Volume',
     ];
 
     protected array $allowedFilters = [

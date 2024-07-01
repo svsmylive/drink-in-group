@@ -40,6 +40,12 @@ class DishEditLayout extends Rows
                 ->title(__('Цена'))
                 ->placeholder(__('Цена')),
 
+            Input::make('dish.mitm_Volume')
+                ->type('text')
+                ->required()
+                ->title(__('Вес, кг'))
+                ->placeholder(__('Вес, кг')),
+
             CheckBox::make('dish.is_show')
                 ->title(__('Активность'))
                 ->sendTrueOrFalse()

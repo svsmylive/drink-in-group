@@ -32,6 +32,7 @@ class DishRepository
                     'mvtp_ID' => $data['mitm_mvtp_ID'],
                     'category_external_id' => $categoryGuid,
                     'institution_id' => $institution->id,
+                    'mitm_Volume' => $data['mitm_Volume'],
                 ]);
             } else {
                 $dish->update([
@@ -39,6 +40,7 @@ class DishRepository
                     'mvtp_ID' => $data['mitm_mvtp_ID'],
                     'category_external_id' => $categoryGuid,
                     'institution_id' => $institution->id,
+                    'mitm_Volume' => $data['mitm_Volume'],
                 ]);
             }
         } catch (Exception $e) {

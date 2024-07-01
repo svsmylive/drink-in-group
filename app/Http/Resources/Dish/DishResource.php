@@ -24,6 +24,7 @@ class DishResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'price' => $this->price,
+                'weight' => $this->mitm_Volume * 1000,
                 'image' => AttachmentsResource::collection(
                     $this->whenNotNull($this->image()->exists() ? $this->image()->get() : null)
                 ),

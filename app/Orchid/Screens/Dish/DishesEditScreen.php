@@ -78,6 +78,7 @@ class DishesEditScreen extends Screen
     public function save(Dish $dish, SaveDishRequest $request): RedirectResponse
     {
         $data = $request->validated()['dish'];
+        $data['mitm_Volume'] = (float)str_replace(',', '.', $data['mitm_Volume']);
 
         if ($attachment = $data['attachment'] ?? null) {
             $dish->attachment()->sync($attachment);

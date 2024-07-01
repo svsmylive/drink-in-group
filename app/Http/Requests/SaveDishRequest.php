@@ -13,6 +13,7 @@ class SaveDishRequest extends FormRequest
             'dish.price' => ['required', 'integer'],
             'dish.is_show' => ['required', 'boolean'],
             'dish.attachment' => ['nullable', 'sometimes'],
+            'dish.mitm_Volume' => ['nullable', 'sometimes'],
         ];
     }
 
