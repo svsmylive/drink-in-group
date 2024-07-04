@@ -114,12 +114,12 @@ class TillypadService
         ];
 
         foreach (json_decode($order->info, true) as $data) {
-            $dish = Dish::find($data->id);
+            $dish = Dish::find($data['id']);
             $orders['orderItems'][] = [
                 'orit_mitm_ID' => $dish->external_id,
                 'orit_mvtp_ID' => $dish->mvtp_ID,
                 'orit_Volume' => 1,
-                'orit_Count' => $data->count,
+                'orit_Count' => $data['count'],
                 'orit_Price' => $dish->price,
                 'orit_VAT' => 0,
                 'orit_PriceVat' => 0,
