@@ -75,10 +75,11 @@ class OrderService
             'text' => $message,
         ]);
 
-        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $message,
-        ]);
+        //todo раскомментировать после тестов
+//        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+//            'chat_id' => $chatId,
+//            'text' => $message,
+//        ]);
     }
 
     private function getTelegramMessage(Order $order, object $metaData): string

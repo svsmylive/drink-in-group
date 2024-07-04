@@ -133,6 +133,12 @@ return [
             'level' => 'debug',
         ],
 
+        'yookassa' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/yookassa.log'),
+            'level' => 'debug',
+        ],
+
         'category' => [
             'driver' => 'daily',
             'path' => storage_path('logs/category.log'),

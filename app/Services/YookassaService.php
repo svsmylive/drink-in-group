@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Services\PaymentInterface;
 use App\Models\Order;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use YooKassa\Client;
 use YooKassa\Common\Exceptions\ApiException;
@@ -110,8 +111,20 @@ class YookassaService implements PaymentInterface
                 if ($payment->paid === true) {
                     $order = Order::findByTransactionId($payment->id);
                     $metaData = (object)$payment->metadata;
+
+                    Log::channel('yookassa')->debug(
+                        'callback yookassa payment', ['payment' => $payment]
+                    );
+
                     if (!$order) {
-                        Log::info('По транзакции не возможно найти заказ', [$payment]);
+                        $apiKey = config('telegram.api_key');
+
+                        $str = implode(', ', $notification->toArray());
+
+                        Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+                            'chat_id' => '-4281880650',
+                            'text' => 'По транзакции не возможно найти заказ, payment: ' . $str,
+                        ]);
                     } else {
                         $this->tillypadService->sendOrder($metaData, $order);
                         resolve(OrderService::class)->sendTelegram($metaData, $order);

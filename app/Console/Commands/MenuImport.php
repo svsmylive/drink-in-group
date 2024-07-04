@@ -58,7 +58,7 @@ class MenuImport extends Command
 
             Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
                 'chat_id' => '-4281880650',
-                'text' => 'Ошибка при интеграции меню из tillypad: ' . Str::limit($e->getMessage(), 30),
+                'text' => 'Ошибка при интеграции меню из tillypad: ' . $e->getMessage(),
             ]);
         }
     }
