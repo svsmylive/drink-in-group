@@ -112,7 +112,7 @@ class TillypadService
             'ordr_Name' => 'DS' . $orderCount->count,
             'orderItems' => []
         ];
-        logger()->debug('info', [$order->info]);
+        logger()->debug('info', [json_decode($order->info, true)]);
 
         foreach (json_decode($order->info, true) as $id => $data) {
             $dish = Dish::find($id);
