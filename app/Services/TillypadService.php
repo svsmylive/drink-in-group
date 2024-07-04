@@ -129,7 +129,7 @@ class TillypadService
             //статус подготовка
             'gest_Comment' => $comment,
             'gest_DateOpen' => $dateOrder,
-            'gest_dvsn_ID' => '88971A81-082C-9143-9905-A0BC07FF2F21',
+            'gest_dvsn_ID' => 'C21850A8-238E-B947-B9D0-CAF27739EDB1',
             //боевое подразделение cвое для камелота, кулинарии
 //            'gest_dvsn_ID' => 'C21850A8-238E-B947-B9D0-CAF27739EDB1',
             'gest_ClientPhone' => $phone,
