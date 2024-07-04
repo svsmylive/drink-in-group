@@ -75,10 +75,10 @@ class TillypadService
 
             Log::info('order gest_ID', [$response]);
         }
-        /*if (isset($response['gest_ID'])) {
+        if (isset($response['gest_ID'])) {
             $guestID = $response['gest_ID'];
             $this->createPayment($order, $guestID);
-        }*/
+        }
     }
 
     /**
@@ -199,22 +199,22 @@ class TillypadService
         Http::post(config('tillypad.url') . '/post-client', $guestJson);
     }
 
-//    /**
-//     * @param Order $order
-//     * @param string $guestID
-//     * @return void
-//     */
-//    private function createPayment(Order $order, string $guestID): void
-//    {
-//        $payment = [
-//            'Payment' => [
-//                'gest_ID' => $guestID,
-//                'paySum' => $order->amount,
-//            ],
-//        ];
-//
-//        $response = Http::post(config('tillypad.url') . '/pay-guest', $payment);
-//
-//        Log::info('payment response', [$response->body()]);
-//    }
+    /**
+     * @param Order $order
+     * @param string $guestID
+     * @return void
+     */
+    private function createPayment(Order $order, string $guestID): void
+    {
+        $payment = [
+            'Payment' => [
+                'gest_ID' => $guestID,
+                'paySum' => $order->amount,
+            ],
+        ];
+
+        $response = Http::post(config('tillypad.url') . '/pay-guest', $payment);
+
+        Log::info('payment response', [$response->body()]);
+    }
 }
