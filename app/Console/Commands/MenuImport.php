@@ -7,7 +7,6 @@ use App\Services\MenuService;
 use App\Services\TillypadService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 class MenuImport extends Command
 {

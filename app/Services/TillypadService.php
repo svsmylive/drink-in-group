@@ -77,7 +77,7 @@ class TillypadService
         }
         if (isset($response['gest_ID'])) {
             $guestID = $response['gest_ID'];
-            $this->createPayment($order, $guestID);
+            $this->createPayment($order->amount, $guestID);
         }
     }
 
@@ -200,21 +200,45 @@ class TillypadService
     }
 
     /**
-     * @param Order $order
+     * @param $amount
      * @param string $guestID
      * @return void
      */
-    private function createPayment(Order $order, string $guestID): void
+    public function createPayment($amount, string $guestID): void
     {
         $payment = [
             'Payment' => [
                 'gest_ID' => $guestID,
-                'paySum' => $order->amount,
+                'paySum' => $amount,
             ],
         ];
 
         $response = Http::post(config('tillypad.url') . '/pay-guest', $payment);
 
         Log::info('payment response', [$response->body()]);
+    }
+
+    public function getGuestIdByPhone(string $phone): string
+    {
+        $response = Http::post(
+            config('tillypad.url') . '/custom-execute/GuestPhones1?value1=C21850A8-238E-B947-B9D0-CAF27739EDB1'
+        );
+
+        $clientsGuests = json_decode($response->body(), true);
+
+        if (!isset($clientsGuests['main'])) {
+            $apiKey = config('telegram.api_key');
+
+            Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+                'chat_id' => '-4281880650',
+                'text' => 'Ошибка создания оплаты гостевого счета в tillypad при успешной оплате пользователя!',
+            ]);
+
+            return '';
+        }
+
+        $item = collect($clientsGuests['main'])->where('gest_ClientPhone', $phone)->last();
+
+        return blank($item) ? '' : $item['gest_id'];
     }
 }
