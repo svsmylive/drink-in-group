@@ -210,6 +210,7 @@ class TillypadService
             'Payment' => [
                 'gest_ID' => $guestID,
                 'paySum' => $amount,
+                'payType_ID' => '5C5A5E90-4F39-C143-AFCF-4EF9AFC46380',
             ],
         ];
 
