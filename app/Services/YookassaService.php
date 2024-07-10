@@ -123,7 +123,7 @@ class YookassaService implements PaymentInterface
 
                         Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
                             'chat_id' => '-4281880650',
-                            'text' => 'Счет в СМС оплачен успешно! ' . "\n Сумма платежа: " . (float)($payment->amount->value) . "\n, Сумма дохода: " . (float)($payment->income_amount->value) . "\n guestId : " . $guestId,
+                            'text' => 'Счет в СМС оплачен успешно! ' . "\n Сумма платежа: " . (float)($payment->amount->value) . "\n Сумма дохода: " . (float)($payment->income_amount->value) . "\n guestId : " . $guestId,
                         ]);
 
                         Log::channel('yookassa')->debug(
