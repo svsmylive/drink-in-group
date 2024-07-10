@@ -221,7 +221,7 @@ class TillypadService
     public function getGuestIdByPhone(string $phone): string
     {
         $response = Http::post(
-            config('tillypad.url') . '/custom-execute/GuestPhones1?value1=C21850A8-238E-B947-B9D0-CAF27739EDB1'
+            config('tillypad.url') . '/custom-execute/GuestPhones1?value1=D50C5D1F-2030-D741-91DC-D18B8E1E8909'
         );
 
         $clientsGuests = json_decode($response->body(), true);
@@ -238,6 +238,13 @@ class TillypadService
         }
 
         $item = collect($clientsGuests['main'])->where('gest_ClientPhone', $phone)->last();
+
+        if (blank($item)) {
+            Log::channel('yookassa')->debug(
+                'empty $item', ['phone' => $phone, $clientsGuests]
+            );
+        }
+
 
         return blank($item) ? '' : $item['gest_id'];
     }

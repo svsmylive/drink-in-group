@@ -132,6 +132,11 @@ class YookassaService implements PaymentInterface
 
                         if (!empty($guestId)) {
                             $this->tillypadService->createPayment((float)$payment->amount->value, $guestId);
+
+                            Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
+                                'chat_id' => '-4281880650',
+                                'text' => 'Платеж успешно выгружен в tillypad!',
+                            ]);
                         }
 
                         return;
