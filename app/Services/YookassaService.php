@@ -119,11 +119,11 @@ class YookassaService implements PaymentInterface
                     );
 
                     if (!isset($metaData->typeOfDelivery)) {
-                        $guestId = $this->tillypadService->getGuestIdByPhone($metaData->phone ?? '');
+                        $guestId = $this->tillypadService->getGuestIdByPhone($metaData->custName ?? '');
 
                         Http::post("https://api.telegram.org/bot{$apiKey}/sendMessage", [
                             'chat_id' => '-4281880650',
-                            'text' => 'Счет в СМС оплачен успешно! ' . "\n Сумма платежа: " . (float)$metaData->amount->value . "\n, Сумма дохода: " . (float)$metaData->income_amount->value . "\n guestId : " . $guestId,
+                            'text' => 'Счет в СМС оплачен успешно! ' . "\n Сумма платежа: " . (float)($payment->amount->value) . "\n, Сумма дохода: " . (float)($payment->income_amount->value) . "\n guestId : " . $guestId,
                         ]);
 
                         Log::channel('yookassa')->debug(
@@ -131,7 +131,7 @@ class YookassaService implements PaymentInterface
                         );
 
                         if (!empty($guestId)) {
-                            $this->tillypadService->createPayment((float)$metaData->amount->value, $guestId);
+                            $this->tillypadService->createPayment((float)$payment->amount->value, $guestId);
                         }
 
                         return;
