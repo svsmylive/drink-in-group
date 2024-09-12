@@ -13,7 +13,7 @@ class HttpAdapter
      */
     public function __construct(public PendingRequest $httpClient)
     {
-        $this->httpClient->connectTimeout(180);
+        $this->httpClient->timeout(180);
         $this->httpClient->retry(3, 5000, function (\Exception $exception) {
             if (
                 $exception->getCode() == 0
