@@ -2,37 +2,45 @@
 
 namespace App\Services\Adapter;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\PendingRequest;
 
 class HttpAdapter
 {
     private const BASE_URL = '';
 
     /**
-     * @param Client $httpClient
+     * @param PendingRequest $httpClient
      */
-    public function __construct(public Client $httpClient){}
+    public function __construct(public PendingRequest $httpClient)
+    {
+        $this->httpClient->connectTimeout(180);
+        $this->httpClient->retry(3, 5000, function (\Exception $exception) {
+            if (
+                $exception->getCode() == 0
+                || substr((string)$exception->getCode(), 0, 1) == 5
+            ) {
+                return true;
+            }
+            return false;
+        });
+    }
 
     /**
      * @param string $uri
      * @param array $options
      * @return array|null
-     * @throws GuzzleException
      */
     public function get(string $uri, array $options = []): array|null
     {
-        $response = $this->httpClient->request(
-            'GET',
+        $response = $this->httpClient->get(
             sprintf('%s%s', self::BASE_URL, $uri),
             $options
         );
 
-        $body = $response->getBody();
+        $body = $response->json();
 
         if (!empty($body)) {
-            return json_decode($body, true);
+            return $body;
         }
 
         return null;

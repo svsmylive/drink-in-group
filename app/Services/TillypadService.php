@@ -26,7 +26,6 @@ class TillypadService
     /**
      * @param Institution $institution
      * @return Collection|null
-     * @throws GuzzleException
      */
     public function getMenu(Institution $institution): Collection|null
     {
