@@ -14,15 +14,15 @@ class HttpAdapter
     public function __construct(public PendingRequest $httpClient)
     {
         $this->httpClient->timeout(1200);
-        $this->httpClient->retry(3, 5000, function (\Exception $exception) {
-            if (
-                $exception->getCode() == 0
-                || substr((string)$exception->getCode(), 0, 1) == 5
-            ) {
-                return true;
-            }
-            return false;
-        });
+//        $this->httpClient->retry(3, 5000, function (\Exception $exception) {
+//            if (
+//                $exception->getCode() == 0
+//                || substr((string)$exception->getCode(), 0, 1) == 5
+//            ) {
+//                return true;
+//            }
+//            return false;
+//        });
     }
 
     /**
