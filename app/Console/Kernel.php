@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('menu:import')->everyFifteenMinutes();
+        $schedule->command('menu:import')->daily();
         $schedule->command('order-count:reset')->dailyAt('12:00');
 //         $schedule->command('inspire')->hourly();
     }
